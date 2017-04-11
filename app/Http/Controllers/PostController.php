@@ -18,7 +18,7 @@ class PostController extends Controller
     public function index()
     {
         //
-        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        $categories = DB::table('categorys')->where('creator_id', Auth::user()['id'])->get();
         $posts = Post::orderBy('created_at', 'asc')->get();
         //dd($posts);
         //echo $posts[0]['attributes']['post_topic'];
