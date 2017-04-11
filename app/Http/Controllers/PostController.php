@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -15,12 +18,16 @@ class PostController extends Controller
     public function index()
     {
         //
+        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
         $posts = Post::orderBy('created_at', 'asc')->get();
         //dd($posts);
         //echo $posts[0]['attributes']['post_topic'];
         //$post = $posts[0]['attributes']['post_topic'];
         //die($post);
-        return view('home', ['posts' => $posts]);
+        return view('home', [
+            'posts' => $posts,
+            'categories' => $categories,
+            ]);
     }
 
     /**
@@ -59,6 +66,8 @@ class PostController extends Controller
         $post = new Post;
         $post->post_topic = $request->postTitle;
         $post->post = $request->postBody;
+        $post->creator_id = Auth::user()['id'];
+        $post->categories_id = 1;
         $post->save();
         return redirect('/home');
     }

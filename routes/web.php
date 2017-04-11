@@ -18,3 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::resource('home', 'PostController');
+Route::post('/category', 'CategoryController@store');
+
+//Route::post('imageupload', 'ImageController@store');
+
+

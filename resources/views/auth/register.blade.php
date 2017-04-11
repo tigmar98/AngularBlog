@@ -66,6 +66,7 @@
                             </div>
                         </div>
 
+
                         <div class="form-group">
                             <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
 
