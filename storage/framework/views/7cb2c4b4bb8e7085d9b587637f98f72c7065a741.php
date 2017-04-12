@@ -8,12 +8,15 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title><?php echo e(config('app.name', 'Laravel')); ?></title>
+    <title><?php echo e(config('app.name', 'Blog')); ?></title>
 
     <!-- Styles -->
     <link href="<?php echo e(asset('css/app.css')); ?>" rel="stylesheet">
+    <?php echo $__env->yieldContent('links'); ?>
 
     <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <?php echo $__env->yieldContent('scripts'); ?>
     <script>
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
@@ -36,7 +39,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="<?php echo e(url('/')); ?>">
-                        <?php echo e(config('app.name', 'Laravel')); ?>
+                        <?php echo e(config('app.name', 'Blog')); ?>
 
                     </a>
                 </div>
@@ -45,6 +48,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;
+                        <?php echo $__env->yieldContent('navbar'); ?>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

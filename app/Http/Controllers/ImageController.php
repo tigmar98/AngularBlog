@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Blog\Http\Controllers;
 
-use App\Http\Requests;
+use Blog\Http\Requests;
 use Guzzle\Tests\Plugin\Redirect;
-use App\Image;
+use Blog\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
 class ImageController extends Controller
@@ -28,22 +29,26 @@ class ImageController extends Controller
 	 */
 	public function store(Request $request){
 		// Store records process
-		$image = new Image();
-        $image->user_id = Auth::user()['id'];
-   		if($request->hasFile('image')) {
-            $file = Input::file('image');
+		//$image = new Image();
+        $file = $request->file('img');
+   		if($file) {
+            //$request->hasFile('img')
+              echo "There is an image";
+//            $file = Input::file('image');
             //getting timestamp
-            $timestamp = str_replace([' ', ':'], '-', Carbon::now()->toDateTimeString());
-            
-            $name = $timestamp. '-' .$file->getClientOriginalName();
-            
-            $image->filePath = $name;
-
-            $file->move(public_path().'/images/', $name);
+            //$timestamp = str_replace([' ', ':'], '-', Carbon::now()->toDateTimeString());
+//            $name = $file->getClientOriginalName();
+            //$name = $file->getClientOriginalName();
+//            $file->move(public_path().'/images/', $name);
+  //          $image->filePath = $name;
+ //           $image->user_id = Auth::user()['id'];
         }
-        $image->save();
-        return $this->create()->with('success', 'Image Uploaded Successfully');
-
+        else {
+            echo "There is no such file";
+        }
+ //       $image->save();
+   //     return $this->create();
+         return 0;
 
    	}
 

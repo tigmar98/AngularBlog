@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@section('links')
+    <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }} ">
+@endsection
+
+@section('scripts')
+    <script type="text/javascript" src=" {{ asset('js/script.js') }} "></script>
+@endsection
+
+@section('navbar')
+    <a href="#">Posts</a>
+@endsection
+
+
 @section('content')
 <div class="container">
     
@@ -7,6 +20,7 @@
     <div class="row">
         <div class="col-sm-4">
             <form action="/imageupload" method="post">
+                {{ csrf_field() }}
                 <input type="file" name="img">
                 <button type="submit">Add photo</button>
             </form>
@@ -14,25 +28,40 @@
     </div>
 -->
 
+
+
     <div class="row">
 
         <div class="col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">Categories</div>
                 <div class="panel-body">
-                    <div class="">
+                    <div>
                         <form action="/category" method="post">
+                            {{ csrf_field() }}
                             <input type="text" name="categoryName" required>
                             <button type="submit" class="btn btn-primary">Add A New Category</button>
                         </form>
                     </div>
-                    @foreach($categories as $category)
-                        {{$category->category}}  <br>
-                    @endforeach
+                    <ul class="list-group">
+                        @foreach($categories as $category)
+                           <li class="list-group-item"> 
+                                <form action="/home/{{$category->id}}" method="get" style="display:inline">
+                                    <button type="submit" class="btn btn-primary">{{$category->category}}</button>
+                                </form>
+                                <form action="/category/{{$category->id}}" method="post" class="pull-right" style="display:inline">
+                                     {{csrf_field()}}
+                                     {{method_field('Delete')}}
+                                     <button type="submit" class="btn btn-warning">Delete</button>
+                                </form>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
 
+        @if(isset($posts))
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">Posts</div>
@@ -40,37 +69,49 @@
                 <div class="panel-body">
 
                     @include('common.errors')
-
-                    <form action="/home" method="post" class="col-sm-10">
-                        <div class="form-group col-sm-3">
-                            <input type="text" name="postTitle" class="form-control" placeholder="Post Title...">
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <textarea name="postBody" rows="2" col="6"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                        {{ csrf_field() }}
-                    </form>
+                    <div>
+                        <form action="/home" method="post">
+                            <div class="form-group col-sm-3">
+                                <input type="text" name="postTitle" class="form-control" placeholder="Post Title...">
+                            </div>
+                            <input type="hidden" name="categories_id" value="{{$cat_id}}">
+                            <div class="form-group col-sm-4">
+                                <textarea name="postBody" rows="2" col="6"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Add a new post</button>
+                            </div>
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                      <ul class="list-group">
+                            @foreach($posts as $post)
+                                <li class="list-group-item" style="text-align:left">
+                                    <p class="postP">
+                                        <strong><span class="postTopic">{{$post->post_topic}}</span></strong>
+                                        <span class="postBody">{{$post->post}}</span>
+                                    </p>
+                                    <form action="/home/{{$post->id}}" method="post" class="pull-right delForm" style="display:inline">
+                                        {{csrf_field()}}
+                                        {{method_field('Delete')}}
+                                        <button class="btn btn-danger delete">Delete</button>
+                                    </form> 
+                                    <form  action="" method="post" class="pull-right" style="display:inline">
+                                        {{csrf_field()}}
+                                        <input type="hidden" name="hidId" value="{{$post->id}}">
+                                        <button type="button" class="btn btn-warning edit">Edit</button>
+                                    </form>
+                                </li>
+                            @endforeach
+                    </ul>
                 </div>
-        </div>            
-    </div>           
+             </div>            
+        </div>           
+      @endif          
                 
-                <ul class="list-group">
-                    @foreach($posts as $post)
-                        <li class="list-group-item">
-                            {{$post['post_topic']}} 
-                            <form action="/home/{{$post->id}}" method="post" class="pull-right">
-                                {{csrf_field()}}
-                                {{method_field('Delete')}}
-                                <button class="btn btn-warning">Delete</button>
-                            </form> 
-                        </li>
-                    @endforeach
-                </ul>
-
                 <!-- {{Auth::user()['id']}} -->
-        </div>
+ </div>
+                
+
 </div>
 @endsection

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Post;
+use Blog\Post;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,15 +18,15 @@ class PostController extends Controller
     public function index()
     {
         //
-        $categories = DB::table('categorys')->where('creator_id', Auth::user()['id'])->get();
-        $posts = Post::orderBy('created_at', 'asc')->get();
+        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        
         //dd($posts);
         //echo $posts[0]['attributes']['post_topic'];
         //$post = $posts[0]['attributes']['post_topic'];
         //die($post);
-        return view('home', [
-            'posts' => $posts,
-            'categories' => $categories,
+        return view('home',
+            [
+                'categories' => $categories,
             ]);
     }
 
@@ -52,24 +52,30 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
-        $validator = Validator::make($request->all(), [
-            'postTitle' => 'required|max:255',
-            'postBody'  => 'required|max:255',
-        ]);
+        $validator = Validator::make($request->all(), 
+            [
+                'postTitle' => 'required|max:255',
+                'postBody'  => 'required|max:255',
+            ]);
 
-       if ($validator->fails()) {
-            return redirect('/home')
-                    ->withInput()
-                    ->withErrors($validator);
+       if ($validator->fails()) 
+            {
+                return redirect('/home')
+                       ->withInput()
+                       ->withErrors($validator);
             }
 
         $post = new Post;
         $post->post_topic = $request->postTitle;
         $post->post = $request->postBody;
         $post->creator_id = Auth::user()['id'];
-        $post->categories_id = 1;
+        $post->categories_id = $request->categories_id;
         $post->save();
-        return redirect('/home');
+        $id = $request->categories_id;
+        return redirect()->action('PostController@show',
+            [
+                'id' => $id 
+            ]);
     }
 
     /**
@@ -81,6 +87,14 @@ class PostController extends Controller
     public function show($id)
     {
         //
+        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        $posts = DB::table('posts')->where('categories_id', $id)->get();
+
+        return view('home', [
+            'posts' => $posts,
+            'categories' => $categories,
+            'cat_id' => $id,
+            ]);
     }
 
     /**
@@ -115,7 +129,26 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+        $postCatId = DB::table('posts')->where('id', $id)->get();
+        foreach($postCatId as $postcatid){
+            $cat_id = $postcatid->categories_id;
+        }
+        //dd($categories);
+     
         Post::findOrFail($id)->delete();
-        return redirect('/home');
+
+/*        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        $posts = DB::table('posts')->where('categories_id', $cat_id)->get();
+
+        return view('/home', [
+            'posts' => $posts,
+            'categories' => $categories,
+            'cat_id' => $id,
+            ]);*/
+
+        return redirect()->action('PostController@show', 
+            [
+                'id' => $cat_id
+            ]);
     }
 }

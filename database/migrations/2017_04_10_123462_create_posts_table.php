@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->integer('creator_id')->unsigned();
             $table->foreign('creator_id')->references('id')->on('users');
             $table->integer('categories_id')->unsigned();
-            $table->foreign('categories_id')->references('id')->on('categorys');
+            $table->foreign('categories_id')->references('id')->on('categories');
            // $table->rememberToken();
             $table->timestamps();
         });

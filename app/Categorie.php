@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace Blog;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Categorie extends Model
 {
     //
-    
+
 }
