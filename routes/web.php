@@ -19,9 +19,9 @@ Auth::routes();
 
 Route::resource('home', 'PostController');
 //Route::post('/category', 'CategoryController@store');
-Route::resource('category', 'CategorieController');
-
-
-Route::post('imageupload', 'ImageController@store');
+Route::resource('category', 'CategoryController');
+Route::get('/postedit/{id}', 'PostController@update');
+Route::get('/categoryedit/{id}', 'CategoryController@update');
+//Route::post('imageupload', 'ImageController@store');
 
 

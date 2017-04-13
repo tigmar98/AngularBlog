@@ -47,12 +47,19 @@
                         @foreach($categories as $category)
                            <li class="list-group-item"> 
                                 <form action="/home/{{$category->id}}" method="get" style="display:inline">
-                                    <button type="submit" class="btn btn-primary">{{$category->category}}</button>
+                                    <button type="submit" class="btn btn-primary catButt">{{$category->category}}</button>
                                 </form>
                                 <form action="/category/{{$category->id}}" method="post" class="pull-right" style="display:inline">
                                      {{csrf_field()}}
                                      {{method_field('Delete')}}
-                                     <button type="submit" class="btn btn-warning">Delete</button>
+                                     <button type="submit" class="btn btn-danger btnDel">Delete</button>
+                                </form>
+                                <form  class="pull-right" style="display:inline">
+                                        <!--<input type="hidden" name="_method" value="PUT"> -->
+                                        <input type="hidden" name="hidId" value="{{$category->id}}" class="hidCatId">
+                                        <button type="button" class="btn btn-warning editCat">Edit</button>
+                                        {{method_field('PUT')}}
+                                        {{csrf_field()}}
                                 </form>
                             </li>
                         @endforeach
@@ -96,10 +103,12 @@
                                         {{method_field('Delete')}}
                                         <button class="btn btn-danger delete">Delete</button>
                                     </form> 
-                                    <form  action="" method="post" class="pull-right" style="display:inline">
-                                        {{csrf_field()}}
-                                        <input type="hidden" name="hidId" value="{{$post->id}}">
+                                    <form  class="pull-right" style="display:inline">
+                                        <!--<input type="hidden" name="_method" value="PUT"> -->
+                                        <input type="hidden" name="hidId" class="hidPostId" value="{{$post->id}}">
                                         <button type="button" class="btn btn-warning edit">Edit</button>
+                                        {{method_field('PUT')}}
+                                        {{csrf_field()}}
                                     </form>
                                 </li>
                             @endforeach

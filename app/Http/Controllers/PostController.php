@@ -4,9 +4,9 @@ namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Blog\Post;
+use Blog\Category;
 use Validator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -18,7 +18,8 @@ class PostController extends Controller
     public function index()
     {
         //
-        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        //$categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        $categories = Category::where('creator_id', Auth::user()['id'])->get();
         
         //dd($posts);
         //echo $posts[0]['attributes']['post_topic'];
@@ -87,8 +88,8 @@ class PostController extends Controller
     public function show($id)
     {
         //
-        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
-        $posts = DB::table('posts')->where('categories_id', $id)->get();
+        $categories = Category::where('creator_id', Auth::user()['id'])->get();
+        $posts = Post::where('categories_id', $id)->get();
 
         return view('home', [
             'posts' => $posts,
@@ -118,6 +119,12 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         //
+        Post::where('id', $id)->update([
+            'post_topic' => $request->post_topic,
+            'post' => $request->post
+            ]);
+        return redirect()->action('PostController@index');
+        //return $request->postTopic;
     }
 
     /**
@@ -129,9 +136,9 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
-        $postCatId = DB::table('posts')->where('id', $id)->get();
-        foreach($postCatId as $postcatid){
-            $cat_id = $postcatid->categories_id;
+        $postCatId = Post::where('id', $id)->get();
+        foreach($postCatId as $post_cat_id){
+            $cat_id = $post_cat_id->categories_id;
         }
         //dd($categories);
      

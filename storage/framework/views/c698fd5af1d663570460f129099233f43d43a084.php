@@ -47,14 +47,23 @@
                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <li class="list-group-item"> 
                                 <form action="/home/<?php echo e($category->id); ?>" method="get" style="display:inline">
-                                    <button type="submit" class="btn btn-primary"><?php echo e($category->category); ?></button>
+                                    <button type="submit" class="btn btn-primary catButt"><?php echo e($category->category); ?></button>
                                 </form>
                                 <form action="/category/<?php echo e($category->id); ?>" method="post" class="pull-right" style="display:inline">
                                      <?php echo e(csrf_field()); ?>
 
                                      <?php echo e(method_field('Delete')); ?>
 
-                                     <button type="submit" class="btn btn-warning">Delete</button>
+                                     <button type="submit" class="btn btn-danger btnDel">Delete</button>
+                                </form>
+                                <form  class="pull-right" style="display:inline">
+                                        <!--<input type="hidden" name="_method" value="PUT"> -->
+                                        <input type="hidden" name="hidId" value="<?php echo e($category->id); ?>" class="hidCatId">
+                                        <button type="button" class="btn btn-warning editCat">Edit</button>
+                                        <?php echo e(method_field('PUT')); ?>
+
+                                        <?php echo e(csrf_field()); ?>
+
                                 </form>
                             </li>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -101,11 +110,14 @@
 
                                         <button class="btn btn-danger delete">Delete</button>
                                     </form> 
-                                    <form  action="" method="post" class="pull-right" style="display:inline">
+                                    <form  class="pull-right" style="display:inline">
+                                        <!--<input type="hidden" name="_method" value="PUT"> -->
+                                        <input type="hidden" name="hidId" class="hidPostId" value="<?php echo e($post->id); ?>">
+                                        <button type="button" class="btn btn-warning edit">Edit</button>
+                                        <?php echo e(method_field('PUT')); ?>
+
                                         <?php echo e(csrf_field()); ?>
 
-                                        <input type="hidden" name="hidId" value="<?php echo e($post->id); ?>">
-                                        <button type="button" class="btn btn-warning edit">Edit</button>
                                     </form>
                                 </li>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
