@@ -36,7 +36,7 @@
                 <div class="panel-heading">Categories</div>
                 <div class="panel-body">
                     <div>
-                        <form action="/category" method="post">
+                        <form action="/category" method="POST">
                             <?php echo e(csrf_field()); ?>
 
                             <input type="text" name="categoryName" required>
@@ -46,10 +46,10 @@
                     <ul class="list-group">
                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <li class="list-group-item"> 
-                                <form action="/home/<?php echo e($category->id); ?>" method="get" style="display:inline">
+                                <form action="/home/<?php echo e($category->id); ?>" method="GET" style="display:inline">
                                     <button type="submit" class="btn btn-primary catButt"><?php echo e($category->category); ?></button>
                                 </form>
-                                <form action="/category/<?php echo e($category->id); ?>" method="post" class="pull-right" style="display:inline">
+                                <form action="/category/<?php echo e($category->id); ?>" method="POST" class="pull-right" style="display:inline">
                                      <?php echo e(csrf_field()); ?>
 
                                      <?php echo e(method_field('Delete')); ?>
@@ -81,13 +81,13 @@
 
                     <?php echo $__env->make('common.errors', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
                     <div>
-                        <form action="/home" method="post">
+                        <form action="/home" method="POST">
                             <div class="form-group col-sm-3">
-                                <input type="text" name="postTitle" class="form-control" placeholder="Post Title...">
+                                <input type="text" name="post_topic" class="form-control" placeholder="Post Title..." required>
                             </div>
                             <input type="hidden" name="categories_id" value="<?php echo e($cat_id); ?>">
                             <div class="form-group col-sm-4">
-                                <textarea name="postBody" rows="2" col="6"></textarea>
+                                <textarea name="post" rows="2" col="6" required></textarea>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Add a new post</button>
@@ -100,10 +100,10 @@
                             <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="list-group-item" style="text-align:left">
                                     <p class="postP">
-                                        <strong><span class="postTopic"><?php echo e($post->post_topic); ?></span></strong>
-                                        <span class="postBody"><?php echo e($post->post); ?></span>
+                                        <strong><span class="post_topic"><?php echo e($post->post_topic); ?></span></strong>
+                                        <span class="post"><?php echo e($post->post); ?></span>
                                     </p>
-                                    <form action="/home/<?php echo e($post->id); ?>" method="post" class="pull-right delForm" style="display:inline">
+                                    <form action="/home/<?php echo e($post->id); ?>" method="POST" class="pull-right delForm" style="display:inline">
                                         <?php echo e(csrf_field()); ?>
 
                                         <?php echo e(method_field('Delete')); ?>

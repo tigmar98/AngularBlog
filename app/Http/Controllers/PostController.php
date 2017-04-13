@@ -55,20 +55,21 @@ class PostController extends Controller
         //
         $validator = Validator::make($request->all(), 
             [
-                'postTitle' => 'required|max:255',
-                'postBody'  => 'required|max:255',
+                'post_topic' => 'required|max:255',
+                'post'  => 'required|max:255',
             ]);
 
        if ($validator->fails()) 
-            {
+            {//   dd($validator);
                 return redirect('/home')
                        ->withInput()
                        ->withErrors($validator);
+
             }
 
         $post = new Post;
-        $post->post_topic = $request->postTitle;
-        $post->post = $request->postBody;
+        $post->post_topic = $request->post_topic;
+        $post->post = $request->post;
         $post->creator_id = Auth::user()['id'];
         $post->categories_id = $request->categories_id;
         $post->save();

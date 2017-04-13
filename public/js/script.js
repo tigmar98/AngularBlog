@@ -17,8 +17,8 @@ $(document).ready(function(){
 		$(this).parent().siblings('.postP').children().attr('contenteditable', 'true');
 		$(this).parent().append('<button type="button" class="editPost btn btn-success">Edit</button>');
 		$(this).parent().append('<button type="button" class="cancelPostEdit btn btn-warning">Cancel</button>');
-		postTopic = $(this).parent().siblings('.postP').find('.postTopic').html();
-		postBody = $(this).parent().siblings('.postP').find('.postBody').html();
+		post_topic = $(this).parent().siblings('.postP').find('.post_topic').html();
+		post = $(this).parent().siblings('.postP').find('.post').html();
 		$(this).css({
 			'display': 'none'
 		});
@@ -35,8 +35,8 @@ $(document).ready(function(){
 			}
 
 		})
-		postTopic = $(this).parent().siblings('.postP').find('.postTopic').html();
-		postBody = $(this).parent().siblings('.postP').find('.postBody').html();
+		post_topic = $(this).parent().siblings('.postP').find('.post_topic').html();
+		post = $(this).parent().siblings('.postP').find('.post').html();
 		var id = $(this).parent().find('.hidPostId').val();
 		//console.log(id);
 		$.ajax({
@@ -58,9 +58,9 @@ $(document).ready(function(){
 	});
 
 	$('body').delegate('.cancelPostEdit', 'click', function(){
-		//console.log(postTopic+ " " +postBody);
-		$(this).parent().siblings('.postP').find('.postTopic').html(postTopic);
-		$(this).parent().siblings('.postP').find('.postBody').html(postBody);
+		//console.log(post_topic+ " " +post);
+		$(this).parent().siblings('.postP').find('.post_topic').html(post_topic);
+		$(this).parent().siblings('.postP').find('.post').html(post);
 		$('.postP').children().attr('contenteditable', 'false');
 		$(this).parent().siblings('.delForm').children().css({
 			'display': 'inline'

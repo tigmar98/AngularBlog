@@ -37,7 +37,7 @@
                 <div class="panel-heading">Categories</div>
                 <div class="panel-body">
                     <div>
-                        <form action="/category" method="post">
+                        <form action="/category" method="POST">
                             {{ csrf_field() }}
                             <input type="text" name="categoryName" required>
                             <button type="submit" class="btn btn-primary">Add A New Category</button>
@@ -46,10 +46,10 @@
                     <ul class="list-group">
                         @foreach($categories as $category)
                            <li class="list-group-item"> 
-                                <form action="/home/{{$category->id}}" method="get" style="display:inline">
+                                <form action="/home/{{$category->id}}" method="GET" style="display:inline">
                                     <button type="submit" class="btn btn-primary catButt">{{$category->category}}</button>
                                 </form>
-                                <form action="/category/{{$category->id}}" method="post" class="pull-right" style="display:inline">
+                                <form action="/category/{{$category->id}}" method="POST" class="pull-right" style="display:inline">
                                      {{csrf_field()}}
                                      {{method_field('Delete')}}
                                      <button type="submit" class="btn btn-danger btnDel">Delete</button>
@@ -77,13 +77,13 @@
 
                     @include('common.errors')
                     <div>
-                        <form action="/home" method="post">
+                        <form action="/home" method="POST">
                             <div class="form-group col-sm-3">
-                                <input type="text" name="postTitle" class="form-control" placeholder="Post Title...">
+                                <input type="text" name="post_topic" class="form-control" placeholder="Post Title..." required>
                             </div>
                             <input type="hidden" name="categories_id" value="{{$cat_id}}">
                             <div class="form-group col-sm-4">
-                                <textarea name="postBody" rows="2" col="6"></textarea>
+                                <textarea name="post" rows="2" col="6" required></textarea>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Add a new post</button>
@@ -95,10 +95,10 @@
                             @foreach($posts as $post)
                                 <li class="list-group-item" style="text-align:left">
                                     <p class="postP">
-                                        <strong><span class="postTopic">{{$post->post_topic}}</span></strong>
-                                        <span class="postBody">{{$post->post}}</span>
+                                        <strong><span class="post_topic">{{$post->post_topic}}</span></strong>
+                                        <span class="post">{{$post->post}}</span>
                                     </p>
-                                    <form action="/home/{{$post->id}}" method="post" class="pull-right delForm" style="display:inline">
+                                    <form action="/home/{{$post->id}}" method="POST" class="pull-right delForm" style="display:inline">
                                         {{csrf_field()}}
                                         {{method_field('Delete')}}
                                         <button class="btn btn-danger delete">Delete</button>
