@@ -22,6 +22,7 @@ Route::resource('home', 'PostController');
 Route::resource('category', 'CategoryController');
 Route::get('/postedit/{id}', 'PostController@update');
 Route::get('/categoryedit/{id}', 'CategoryController@update');
+//Route::get('')
 //Route::post('imageupload', 'ImageController@store');
 
 

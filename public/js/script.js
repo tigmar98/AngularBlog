@@ -29,12 +29,14 @@ $(document).ready(function(){
 	});
 
 	$('body').delegate('.editPost', 'click', function(){
+		$(this).parent().siblings('.postP').find('.post_topic').html(post_topic);
+		$(this).parent().siblings('.postP').find('.post').html(post);
 		$.ajaxSetup({
 			headers: {
 			'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 			}
-
 		})
+
 		post_topic = $(this).parent().siblings('.postP').find('.post_topic').html();
 		post = $(this).parent().siblings('.postP').find('.post').html();
 		var id = $(this).parent().find('.hidPostId').val();
@@ -59,6 +61,7 @@ $(document).ready(function(){
 
 	$('body').delegate('.cancelPostEdit', 'click', function(){
 		//console.log(post_topic+ " " +post);
+
 		$(this).parent().siblings('.postP').find('.post_topic').html(post_topic);
 		$(this).parent().siblings('.postP').find('.post').html(post);
 		$('.postP').children().attr('contenteditable', 'false');

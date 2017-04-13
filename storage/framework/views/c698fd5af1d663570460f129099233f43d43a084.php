@@ -7,7 +7,9 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('navbar'); ?>
-    <a href="#">Posts</a>
+    <li>
+        <a href="/posts">Posts</a>
+    </li>
 <?php $__env->stopSection(); ?>
 
 

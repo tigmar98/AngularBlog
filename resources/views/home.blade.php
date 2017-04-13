@@ -9,7 +9,9 @@
 @endsection
 
 @section('navbar')
-    <a href="#">Posts</a>
+    <li>
+        <a href="/posts">Posts</a>
+    </li>
 @endsection
 
 

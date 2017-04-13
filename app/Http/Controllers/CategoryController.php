@@ -89,7 +89,7 @@ class CategoryController extends Controller
     {
         //
         Category::where('id', $id)->update([
-            'category' => $request->category,
+                'category' => $request->category,
             ]);
         return redirect()->action('PostController@index');
     }
