@@ -1,14 +1,19 @@
 <?php $__env->startSection('links'); ?>
-    <link rel="stylesheet" type="text/css" href=" <?php echo e(asset('css/style.css')); ?> ">
+    <link rel="stylesheet" type="text/css" href=" <?php echo e(asset('css/home_style.css')); ?> ">
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('scripts'); ?>
-    <script type="text/javascript" src=" <?php echo e(asset('js/script.js')); ?> "></script>
+    <script type="text/javascript" src=" <?php echo e(asset('js/home_script.js')); ?> "></script>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('navbar'); ?>
     <li>
-        <a href="/posts">Posts</a>
+        <!--<a href="/posts">Posts</a>-->
+        <form action="/posts/<?php echo e(Auth::user()['id']); ?>" method="GET">
+            <button type="submit" class="all_post_button">Posts</button>
+            <?php echo e(csrf_field()); ?>
+
+        </form>
     </li>
 <?php $__env->stopSection(); ?>
 
@@ -56,12 +61,12 @@
 
                                      <?php echo e(method_field('Delete')); ?>
 
-                                     <button type="submit" class="btn btn-danger btnDel">Delete</button>
+                                     <button type="submit" class="btn btn-danger btn_del">Delete</button>
                                 </form>
                                 <form  class="pull-right" style="display:inline">
                                         <!--<input type="hidden" name="_method" value="PUT"> -->
                                         <input type="hidden" name="hidId" value="<?php echo e($category->id); ?>" class="hidCatId">
-                                        <button type="button" class="btn btn-warning editCat">Edit</button>
+                                        <button type="button" class="btn btn-warning edit_cat">Edit</button>
                                         <?php echo e(method_field('PUT')); ?>
 
                                         <?php echo e(csrf_field()); ?>
@@ -101,11 +106,11 @@
                       <ul class="list-group">
                             <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="list-group-item" style="text-align:left">
-                                    <p class="postP">
+                                    <p class="post_p">
                                         <strong><span class="post_topic"><?php echo e($post->post_topic); ?></span></strong>
                                         <span class="post"><?php echo e($post->post); ?></span>
                                     </p>
-                                    <form action="/home/<?php echo e($post->id); ?>" method="POST" class="pull-right delForm" style="display:inline">
+                                    <form action="/home/<?php echo e($post->id); ?>" method="POST" class="pull-right del_form" style="display:inline">
                                         <?php echo e(csrf_field()); ?>
 
                                         <?php echo e(method_field('Delete')); ?>
@@ -129,7 +134,7 @@
         </div>           
       <?php endif; ?>          
                 
-                <!-- <?php echo e(Auth::user()['id']); ?> -->
+                
  </div>
                 
 

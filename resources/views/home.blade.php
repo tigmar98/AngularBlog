@@ -1,16 +1,20 @@
 @extends('layouts.app')
 
 @section('links')
-    <link rel="stylesheet" type="text/css" href=" {{ asset('css/style.css') }} ">
+    <link rel="stylesheet" type="text/css" href=" {{ asset('css/home_style.css') }} ">
 @endsection
 
 @section('scripts')
-    <script type="text/javascript" src=" {{ asset('js/script.js') }} "></script>
+    <script type="text/javascript" src=" {{ asset('js/home_script.js') }} "></script>
 @endsection
 
 @section('navbar')
     <li>
-        <a href="/posts">Posts</a>
+        <!--<a href="/posts">Posts</a>-->
+        <form action="/posts/{{Auth::user()['id']}}" method="GET">
+            <button type="submit" class="all_post_button">Posts</button>
+            {{ csrf_field() }}
+        </form>
     </li>
 @endsection
 
@@ -54,12 +58,12 @@
                                 <form action="/category/{{$category->id}}" method="POST" class="pull-right" style="display:inline">
                                      {{csrf_field()}}
                                      {{method_field('Delete')}}
-                                     <button type="submit" class="btn btn-danger btnDel">Delete</button>
+                                     <button type="submit" class="btn btn-danger btn_del">Delete</button>
                                 </form>
                                 <form  class="pull-right" style="display:inline">
                                         <!--<input type="hidden" name="_method" value="PUT"> -->
                                         <input type="hidden" name="hidId" value="{{$category->id}}" class="hidCatId">
-                                        <button type="button" class="btn btn-warning editCat">Edit</button>
+                                        <button type="button" class="btn btn-warning edit_cat">Edit</button>
                                         {{method_field('PUT')}}
                                         {{csrf_field()}}
                                 </form>
@@ -96,11 +100,11 @@
                       <ul class="list-group">
                             @foreach($posts as $post)
                                 <li class="list-group-item" style="text-align:left">
-                                    <p class="postP">
+                                    <p class="post_p">
                                         <strong><span class="post_topic">{{$post->post_topic}}</span></strong>
                                         <span class="post">{{$post->post}}</span>
                                     </p>
-                                    <form action="/home/{{$post->id}}" method="POST" class="pull-right delForm" style="display:inline">
+                                    <form action="/home/{{$post->id}}" method="POST" class="pull-right del_form" style="display:inline">
                                         {{csrf_field()}}
                                         {{method_field('Delete')}}
                                         <button class="btn btn-danger delete">Delete</button>
@@ -120,7 +124,7 @@
         </div>           
       @endif          
                 
-                <!-- {{Auth::user()['id']}} -->
+                
  </div>
                 
 

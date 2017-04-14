@@ -3,24 +3,18 @@
 namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Validator;
-use Blog\Category;
 use Blog\Post;
+use Blog\Category;
+use Blog\User;
 use Illuminate\Support\Facades\Auth;
 
-class CategoryController extends Controller
+class AllPostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         //
@@ -44,22 +38,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //Add new category
-        $validator = Validator::make($request->all(), 
-            [
-                'categoryName' => 'required|max:255',
-            ]);
-
-       if ($validator->fails()) {
-            return redirect('/home')
-                    ->withInput()
-                    ->withErrors($validator);
-        }
-        $category = new Category;
-        $category->category = $request->categoryName;
-        $category->creator_id = Auth::user()['id'];
-        $category->save();
-        return redirect()->action('PostController@index');
+        //
     }
 
     /**
@@ -71,6 +50,23 @@ class CategoryController extends Controller
     public function show($id)
     {
         //
+        $posts = Post::get();
+        foreach ($posts as $post) {
+            $post['category'] = Category::where('id', $post['categories_id'])->pluck('category')[0];
+            $post['creator'] = User::where('id', $post['creator_id'])->pluck('name')[0];
+            if($post['creator_id'] === Auth::user()['id']){
+                $post['can_edit'] = 1;
+            }
+            else {
+                $post['can_edit'] = 0;
+            }
+        };
+        //dd($posts);
+        return view('posts', [
+            'posts' => $posts,
+            //'categories' => $categories,
+        ]);
+    
     }
 
     /**
@@ -93,11 +89,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Update choosen category
-        Category::where('id', $id)->update([
-                'category' => $request->category,
-            ]);
-        return redirect()->action('PostController@index');
+        //
     }
 
     /**
@@ -108,17 +100,23 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //Remove choosen category
-        Post::where('categories_id', $id)->delete();
-        Category::findOrFail($id)->delete();
-        $categories = Category::where('creator_id', Auth::user()['id'])->get();
-        //$posts = DB::table('posts')->where('categories_id', $cat_id)->get();
+        //
+        //Remove the choosen post
+        $postCatId = Post::where('id', $id)->get();
+        foreach($postCatId as $post_cat_id){
+            $cat_id = $post_cat_id->categories_id;
+        }
+        //dd($categories);
+     
+        Post::findOrFail($id)->delete();
+        return redirect()->action('AllPostsController@show', [
+                'id' => $id
+            ]);
+    }
 
-        /*return view('/home', [
-         //   'posts' => $posts,
-            'categories' => $categories,
-         //   'cat_id' => $id,
-            ]);*/
-        return redirect()->action('PostController@index');
+
+    public function __construct()
+    {
+        $this->middleware('auth');
     }
 }

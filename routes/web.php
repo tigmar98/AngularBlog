@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('home');
 });
 
 Auth::routes();
@@ -22,7 +22,7 @@ Route::resource('home', 'PostController');
 Route::resource('category', 'CategoryController');
 Route::get('/postedit/{id}', 'PostController@update');
 Route::get('/categoryedit/{id}', 'CategoryController@update');
-//Route::get('')
+Route::resource('posts', 'AllPostsController');
 //Route::post('imageupload', 'ImageController@store');
 
 

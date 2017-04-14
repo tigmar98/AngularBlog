@@ -15,6 +15,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         //
@@ -52,7 +57,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Add new post
         $validator = Validator::make($request->all(), 
             [
                 'post_topic' => 'required|max:255',
@@ -88,7 +93,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        //Show all posts from choosen category
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
         $posts = Post::where('categories_id', $id)->get();
 
@@ -119,7 +124,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Update the choosen post
         Post::where('id', $id)->update([
             'post_topic' => $request->post_topic,
             'post' => $request->post
@@ -136,7 +141,7 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //Remove the choosen post
         $postCatId = Post::where('id', $id)->get();
         foreach($postCatId as $post_cat_id){
             $cat_id = $post_cat_id->categories_id;
