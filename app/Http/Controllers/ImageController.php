@@ -3,7 +3,6 @@
 namespace Blog\Http\Controllers;
 
 use Blog\Http\Requests;
-use Guzzle\Tests\Plugin\Redirect;
 use Blog\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,30 +26,32 @@ class ImageController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request){
-		// Store records process
-		//$image = new Image();
-        $file = $request->file('img');
-   		if($file) {
-            //$request->hasFile('img')
-              echo "There is an image";
-//            $file = Input::file('image');
-            //getting timestamp
-            //$timestamp = str_replace([' ', ':'], '-', Carbon::now()->toDateTimeString());
-//            $name = $file->getClientOriginalName();
-            //$name = $file->getClientOriginalName();
-//            $file->move(public_path().'/images/', $name);
-  //          $image->filePath = $name;
- //           $image->user_id = Auth::user()['id'];
-        }
-        else {
-            echo "There is no such file";
-        }
- //       $image->save();
-   //     return $this->create();
-         return 0;
 
-   	}
+  public function store(Request $request)
+  {
+    $image = new Image();
+    if($request->hasFile('image')) {
+       $file = Input::file('image');
+       $timestamp = time();
+       $name =$timestamp.$file->getClientOriginalName();
+       // /dd($name);
+       $image->file_path = $name;
+       $image->user_id = Auth::user()['id'];
+       $file->move(public_path().'/images/', $name);
+    }
+    //dd($request);
+    if(Image::where('user_id', $image->user_id)->get()){
+      Image::where('user_id', $image->user_id)->update([
+            'file_path' => $name,
+            'user_id' => $image->user_id,
+            ]);   
+    } else{
+      $image->save();
+    }
+    // return $this->create();
+    //$image->save();
+    return redirect()->action('PostController@index');
+  }
 
 
 }

@@ -21,18 +21,21 @@
 <?php $__env->startSection('content'); ?>
 <div class="container">
     
-<!--
+
     <div class="row">
         <div class="col-sm-4">
-            <form action="/imageupload" method="post">
+            <form action="/imageupload" method="POST" enctype="multipart/form-data">
+                <!--<input type="text" name="inp">-->
+                <input type="file" name="image">
+                <button type="submit">Add photo</button>
+                <?php echo e(method_field('PUT')); ?>
+
                 <?php echo e(csrf_field()); ?>
 
-                <input type="file" name="img">
-                <button type="submit">Add photo</button>
             </form>
         </div>
     </div>
--->
+
 
 
 

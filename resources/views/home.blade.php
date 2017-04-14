@@ -22,17 +22,19 @@
 @section('content')
 <div class="container">
     
-<!--
+
     <div class="row">
         <div class="col-sm-4">
-            <form action="/imageupload" method="post">
-                {{ csrf_field() }}
-                <input type="file" name="img">
+            <form action="/imageupload" method="POST" enctype="multipart/form-data">
+                <!--<input type="text" name="inp">-->
+                <input type="file" name="image">
                 <button type="submit">Add photo</button>
+                {{method_field('PUT')}}
+                {{ csrf_field() }}
             </form>
         </div>
     </div>
--->
+
 
 
 

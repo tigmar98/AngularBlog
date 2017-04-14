@@ -23,6 +23,6 @@ Route::resource('category', 'CategoryController');
 Route::get('/postedit/{id}', 'PostController@update');
 Route::get('/categoryedit/{id}', 'CategoryController@update');
 Route::resource('posts', 'AllPostsController');
-//Route::post('imageupload', 'ImageController@store');
+Route::put('/imageupload', 'ImageController@store');
 
 

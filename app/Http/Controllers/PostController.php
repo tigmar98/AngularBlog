@@ -5,6 +5,7 @@ namespace Blog\Http\Controllers;
 use Illuminate\Http\Request;
 use Blog\Post;
 use Blog\Category;
+use Blog\Image;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +26,7 @@ class PostController extends Controller
         //
         //$categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
+        //$image = Image::
         
         //dd($posts);
         //echo $posts[0]['attributes']['post_topic'];
