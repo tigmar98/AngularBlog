@@ -80,6 +80,8 @@
             </div>
         </div>
 
+        <?php echo $__env->make('common.errors', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
         <?php if(isset($posts)): ?>
         <div class="col-md-8">
             <div class="panel panel-default">

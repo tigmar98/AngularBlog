@@ -71,7 +71,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //Add new post
+        //Check the post
         $validator = Validator::make($request->all(), 
             [
                 'post_topic' => 'required|max:255',
@@ -85,7 +85,7 @@ class PostController extends Controller
                        ->withErrors($validator);
 
             }
-
+        //Add a new post
         $post = new Post;
         $post->post_topic = $request->post_topic;
         $post->post = $request->post;

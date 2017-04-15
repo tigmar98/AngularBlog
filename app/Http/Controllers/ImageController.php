@@ -4,6 +4,7 @@ namespace Blog\Http\Controllers;
 
 use Blog\Http\Requests;
 use Blog\Image;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -32,6 +33,20 @@ class ImageController extends Controller
     $image = new Image();
     if($request->hasFile('image')) {
        $file = Input::file('image');
+
+       $validator = Validator::make($request->all(), 
+            [
+                'image' =>'mimes:jpeg,jpg,png'
+            ]);
+
+       if ($validator->fails())
+            {//   dd($validator);
+                return redirect('/home')
+                       ->withInput()
+                       ->withErrors($validator);
+
+            }
+
        $timestamp = time();
        $name =$timestamp.$file->getClientOriginalName();
        // dd($name);
@@ -40,7 +55,7 @@ class ImageController extends Controller
        $file->move(public_path().'/images/', $name);
     }
     //dd($request);
-    // return $this->create();
+    // return;urn $this->create();
     $image->save();
     return redirect()->action('PostController@index');
   }

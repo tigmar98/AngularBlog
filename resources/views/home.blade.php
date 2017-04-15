@@ -74,6 +74,8 @@
             </div>
         </div>
 
+        @include('common.errors')
+
         @if(isset($posts))
         <div class="col-md-8">
             <div class="panel panel-default">
