@@ -34,22 +34,14 @@ class ImageController extends Controller
        $file = Input::file('image');
        $timestamp = time();
        $name =$timestamp.$file->getClientOriginalName();
-       // /dd($name);
+       // dd($name);
        $image->file_path = $name;
        $image->user_id = Auth::user()['id'];
        $file->move(public_path().'/images/', $name);
     }
     //dd($request);
-    if(Image::where('user_id', $image->user_id)->get()){
-      Image::where('user_id', $image->user_id)->update([
-            'file_path' => $name,
-            'user_id' => $image->user_id,
-            ]);   
-    } else{
-      $image->save();
-    }
     // return $this->create();
-    //$image->save();
+    $image->save();
     return redirect()->action('PostController@index');
   }
 

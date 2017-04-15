@@ -21,9 +21,9 @@
 <?php $__env->startSection('content'); ?>
 <div class="container">
     
-
     <div class="row">
         <div class="col-sm-4">
+            <img src="/images/<?php echo e($image_path); ?>" class="profile_pic">
             <form action="/imageupload" method="POST" enctype="multipart/form-data">
                 <!--<input type="text" name="inp">-->
                 <input type="file" name="image">
@@ -35,8 +35,6 @@
             </form>
         </div>
     </div>
-
-
 
 
     <div class="row">
@@ -121,7 +119,6 @@
                                         <button class="btn btn-danger delete">Delete</button>
                                     </form> 
                                     <form  class="pull-right" style="display:inline">
-                                        <!--<input type="hidden" name="_method" value="PUT"> -->
                                         <input type="hidden" name="hidId" class="hidPostId" value="<?php echo e($post->id); ?>">
                                         <button type="button" class="btn btn-warning edit">Edit</button>
                                         <?php echo e(method_field('PUT')); ?>

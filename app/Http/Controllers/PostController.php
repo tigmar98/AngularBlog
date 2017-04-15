@@ -26,16 +26,30 @@ class PostController extends Controller
         //
         //$categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
-        //$image = Image::
+
+        if(Image::where('user_id', Auth::user()['id'])->exists()){
+            $image_path = Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
+            if(!file_exists(public_path().'/images/'.$image_path)){
+                $image_path = "default-user-image.png";
+            }
+        }
+        else{
+            $image_path = "default-user-image.png";
+        }
+        //dd($categories);
+        return view('home',
+            [
+                'categories' => $categories,
+                'image_path' => $image_path,
+                
+            ]);   
+        //dd($image_path);
         
         //dd($posts);
         //echo $posts[0]['attributes']['post_topic'];
         //$post = $posts[0]['attributes']['post_topic'];
         //die($post);
-        return view('home',
-            [
-                'categories' => $categories,
-            ]);
+        
     }
 
     /**
@@ -46,8 +60,6 @@ class PostController extends Controller
     public function create()
     {
         //
-         
-
         //return redirect('/home');
     }
 
@@ -66,7 +78,7 @@ class PostController extends Controller
                 'post'  => 'required|max:255',
             ]);
 
-       if ($validator->fails()) 
+       if ($validator->fails())
             {//   dd($validator);
                 return redirect('/home')
                        ->withInput()
@@ -98,12 +110,25 @@ class PostController extends Controller
         //Show all posts from choosen category
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
         $posts = Post::where('categories_id', $id)->get();
-
+        if(Image::where('user_id', Auth::user()['id'])->exists()){
+            $image_path = Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
+            if(!file_exists(public_path().'/images/'.$image_path)){
+                $image_path = "default-user-image.png";
+            }
+        }
+        else{
+            $image_path = "default-user-image.png";
+        }
         return view('home', [
             'posts' => $posts,
             'categories' => $categories,
             'cat_id' => $id,
-            ]);
+            'image_path' => $image_path,
+        ]);
+        /*return redirect()->action('PostController@index', [
+          //  'posts' => $posts,
+            'cat_id' => $id,
+        ]);*/
     }
 
     /**
@@ -152,7 +177,7 @@ class PostController extends Controller
      
         Post::findOrFail($id)->delete();
 
-/*        $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+/*      $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
         $posts = DB::table('posts')->where('categories_id', $cat_id)->get();
 
         return view('/home', [
