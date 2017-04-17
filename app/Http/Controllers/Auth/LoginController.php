@@ -5,6 +5,7 @@ namespace Blog\Http\Controllers\Auth;
 use Blog\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+
 class LoginController extends Controller
 {
     /*
@@ -27,6 +28,9 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+
+
+     
     /**
      * Create a new controller instance.
      *
@@ -36,4 +40,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest', ['except' => 'logout']);
     }
+
 }
+

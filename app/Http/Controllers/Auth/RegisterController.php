@@ -6,6 +6,10 @@ use Blog\User;
 use Blog\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Socialite;
+use Blog\Social;
+use Illuminate\Support\Facades\Auth;
+
 
 class RegisterController extends Controller
 {
@@ -68,4 +72,54 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function redirectToProvider()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    /**
+     * Obtain the user information from GitHub.
+     *
+     * @return Response
+     */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('facebook')->user();
+        //dd($user->avatar_original);
+        if(Social::where('email', $user->email)->exists()){
+            //dd($user);
+            // return redirect()->action('LoginController', [
+            //     'email' => $user->email,
+            //     'password' => 'null', 
+            // ]);
+            Auth::loginUsingId((User::where('email', $user->email)->pluck('id')[0]));
+            return redirect('/home');
+        }
+        else {
+            User::create([
+                'name' => $user->name,  
+                'email' => $user->email,
+                'password' => bcrypt('null'),
+            ]);
+            Social::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'token' => $user->token,
+                'user_id' => User::where('email', $user->email)->pluck('id')[0],
+                'image_path' => $user->avatar_original,
+
+            ]);
+        }
+
+        // return redirect()->action('LoginController', [
+        //         'email' => $user->email,
+        //         'password' => 'null', 
+        //     ]);
+
+        // $user->token;
+        Auth::loginUsingId((User::where('email', $user->email)->pluck('id')[0]));
+        return redirect('/home');
+    }
+
 }

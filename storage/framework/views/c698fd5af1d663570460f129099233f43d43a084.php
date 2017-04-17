@@ -23,16 +23,18 @@
     
     <div class="row">
         <div class="col-sm-4">
-            <img src="/images/<?php echo e($image_path); ?>" class="profile_pic">
-            <form action="/imageupload" method="POST" enctype="multipart/form-data">
-                <!--<input type="text" name="inp">-->
-                <input type="file" name="image">
-                <button type="submit">Add photo</button>
-                <?php echo e(method_field('PUT')); ?>
+            <img src="<?php echo e($image_path); ?>" class="profile_pic">
+            <?php if($viaFacebook === 0 ): ?>
+                <form action="/imageupload" method="POST" enctype="multipart/form-data">
+                    <!--<input type="text" name="inp">-->
+                    <input type="file" name="image">
+                    <button type="submit">Add photo</button>
+                    <?php echo e(method_field('PUT')); ?>
 
-                <?php echo e(csrf_field()); ?>
+                    <?php echo e(csrf_field()); ?>
 
-            </form>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 

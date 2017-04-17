@@ -24,14 +24,16 @@
     
     <div class="row">
         <div class="col-sm-4">
-            <img src="/images/{{$image_path}}" class="profile_pic">
-            <form action="/imageupload" method="POST" enctype="multipart/form-data">
-                <!--<input type="text" name="inp">-->
-                <input type="file" name="image">
-                <button type="submit">Add photo</button>
-                {{method_field('PUT')}}
-                {{ csrf_field() }}
-            </form>
+            <img src="{{$image_path}}" class="profile_pic">
+            @if($viaFacebook === 0 )
+                <form action="/imageupload" method="POST" enctype="multipart/form-data">
+                    <!--<input type="text" name="inp">-->
+                    <input type="file" name="image">
+                    <button type="submit">Add photo</button>
+                    {{method_field('PUT')}}
+                    {{ csrf_field() }}
+                </form>
+            @endif
         </div>
     </div>
 

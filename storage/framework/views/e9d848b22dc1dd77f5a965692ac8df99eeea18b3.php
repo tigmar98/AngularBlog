@@ -56,6 +56,10 @@
                                 <a class="btn btn-link" href="<?php echo e(route('password.request')); ?>">
                                     Forgot Your Password?
                                 </a>
+
+                                <a class="btn btn-link" href="http://localhost:8000/auth/facebook">
+                                    Login with Facebook account
+                                </a>
                             </div>
                         </div>
                     </form>

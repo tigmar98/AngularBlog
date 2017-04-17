@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Blog\Post;
 use Blog\Category;
 use Blog\Image;
+use Blog\Social;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,22 +26,29 @@ class PostController extends Controller
     {
         //
         //$categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
+        $viaFacebook = 0;
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
 
         if(Image::where('user_id', Auth::user()['id'])->exists()){
-            $image_path = Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
-            if(!file_exists(public_path().'/images/'.$image_path)){
-                $image_path = "default-user-image.png";
+            $image_path = "/images/".Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
+            if(!file_exists(public_path().$image_path)){
+                $image_path = "/images/default-user-image.png";
             }
+        } elseif(Social::where('user_id', Auth::user()['id'])->exists()){
+            $image_path = Social::where('user_id', Auth::user()['id'])->pluck('image_path')[0];
+            $viaFacebook = 1;
         }
         else{
-            $image_path = "default-user-image.png";
+            $image_path = "/images/default-user-image.png";
         }
         //dd($categories);
+        //dd($image_path);
+
         return view('home',
             [
                 'categories' => $categories,
                 'image_path' => $image_path,
+                'viaFacebook' => $viaFacebook,
                 
             ]);   
         //dd($image_path);
@@ -110,20 +118,25 @@ class PostController extends Controller
         //Show all posts from choosen category
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
         $posts = Post::where('categories_id', $id)->get();
+        $viaFacebook = 0;
         if(Image::where('user_id', Auth::user()['id'])->exists()){
-            $image_path = Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
-            if(!file_exists(public_path().'/images/'.$image_path)){
-                $image_path = "default-user-image.png";
+            $image_path = "/images/".Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
+            if(!file_exists(public_path().$image_path)){
+                $image_path = "/images/default-user-image.png";
             }
+        } elseif(Social::where('user_id', Auth::user()['id'])->exists()){
+            $image_path = Social::where('user_id', Auth::user()['id'])->pluck('image_path')[0];
+            $viaFacebook = 1;
         }
         else{
-            $image_path = "default-user-image.png";
+            $image_path = "/images/default-user-image.png";
         }
         return view('home', [
             'posts' => $posts,
             'categories' => $categories,
             'cat_id' => $id,
             'image_path' => $image_path,
+            'viaFacebook' => $viaFacebook,
         ]);
         /*return redirect()->action('PostController@index', [
           //  'posts' => $posts,
