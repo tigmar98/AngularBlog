@@ -4,9 +4,7 @@ namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
-use Blog\Category;
-use Blog\Post;
-use Illuminate\Support\Facades\Auth;
+use Blog\Contracts\CategoryServiceInterface;
 
 class CategoryController extends Controller
 {
@@ -42,7 +40,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryServiceInterface $category_service, Request $request)
     {
         //Add new category
         $validator = Validator::make($request->all(), 
@@ -55,10 +53,8 @@ class CategoryController extends Controller
                     ->withInput()
                     ->withErrors($validator);
         }
-        $category = new Category;
-        $category->category = $request->categoryName;
-        $category->creator_id = Auth::user()['id'];
-        $category->save();
+        
+        $category_service->newCategory($request->categoryName);
         return redirect()->action('PostController@index');
     }
 
@@ -91,12 +87,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryServiceInterface $category_service, Request $request, $id)
     {
         //Update choosen category
-        Category::where('id', $id)->update([
-                'category' => $request->category,
-            ]);
+        $category_service->updateCategory($id, $request->category);
         return redirect()->action('PostController@index');
     }
 
@@ -106,19 +100,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(CategoryServiceInterface $category_service, $id)
     {
         //Remove choosen category
-        Post::where('categories_id', $id)->delete();
-        Category::findOrFail($id)->delete();
-        $categories = Category::where('creator_id', Auth::user()['id'])->get();
-        //$posts = DB::table('posts')->where('categories_id', $cat_id)->get();
-
-        /*return view('/home', [
-         //   'posts' => $posts,
-            'categories' => $categories,
-         //   'cat_id' => $id,
-            ]);*/
+        $category_service->deleteCategory($id);
         return redirect()->action('PostController@index');
     }
 }

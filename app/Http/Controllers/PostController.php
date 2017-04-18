@@ -3,12 +3,15 @@
 namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Blog\Contracts\PostServiceInterface;
+use Blog\Contracts\CategoryServiceInterface;
+use Blog\Contracts\SocialServiceInterface;
 use Blog\Post;
 use Blog\Category;
 use Blog\Image;
-use Blog\Social;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+
 
 class PostController extends Controller
 {
@@ -22,20 +25,20 @@ class PostController extends Controller
         $this->middleware('auth');
     }
     
-    public function index()
+    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service)
     {
         //
         //$categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
         $viaFacebook = 0;
-        $categories = Category::where('creator_id', Auth::user()['id'])->get();
+        $categories = $category_service->allCategories();
 
         if(Image::where('user_id', Auth::user()['id'])->exists()){
             $image_path = "/images/".Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
             if(!file_exists(public_path().$image_path)){
                 $image_path = "/images/default-user-image.png";
             }
-        } elseif(Social::where('user_id', Auth::user()['id'])->exists()){
-            $image_path = Social::where('user_id', Auth::user()['id'])->pluck('image_path')[0];
+        } elseif($social_service->userExists()){
+            $image_path = $social_service->getImage();
             $viaFacebook = 1;
         }
         else{
@@ -43,7 +46,7 @@ class PostController extends Controller
         }
         //dd($categories);
         //dd($image_path);
-
+        
         return view('home',
             [
                 'categories' => $categories,
@@ -77,7 +80,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostServiceInterface $post_service, Request $request)
     {
         //Check the post
         $validator = Validator::make($request->all(), 
@@ -94,16 +97,12 @@ class PostController extends Controller
 
             }
         //Add a new post
-        $post = new Post;
-        $post->post_topic = $request->post_topic;
-        $post->post = $request->post;
-        $post->creator_id = Auth::user()['id'];
-        $post->categories_id = $request->categories_id;
-        $post->save();
-        $id = $request->categories_id;
+        $post_service->newPost($request->post_topic, $request->post, $request->categories_id);
+        //$post_service->newPost('123', '123', '3');
+        
         return redirect()->action('PostController@show',
             [
-                'id' => $id 
+                'id' => $request->categories_id, 
             ]);
     }
 
@@ -113,7 +112,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SocialServiceInterface $social_service, $id)
     {
         //Show all posts from choosen category
         $categories = Category::where('creator_id', Auth::user()['id'])->get();
@@ -124,8 +123,8 @@ class PostController extends Controller
             if(!file_exists(public_path().$image_path)){
                 $image_path = "/images/default-user-image.png";
             }
-        } elseif(Social::where('user_id', Auth::user()['id'])->exists()){
-            $image_path = Social::where('user_id', Auth::user()['id'])->pluck('image_path')[0];
+        } elseif($social_service->userExists()){
+            $image_path = $social_service->getImage();
             $viaFacebook = 1;
         }
         else{
@@ -138,10 +137,6 @@ class PostController extends Controller
             'image_path' => $image_path,
             'viaFacebook' => $viaFacebook,
         ]);
-        /*return redirect()->action('PostController@index', [
-          //  'posts' => $posts,
-            'cat_id' => $id,
-        ]);*/
     }
 
     /**
@@ -170,7 +165,6 @@ class PostController extends Controller
             'post' => $request->post
             ]);
         return redirect()->action('PostController@index');
-        //return $request->postTopic;
     }
 
     /**
@@ -187,18 +181,7 @@ class PostController extends Controller
             $cat_id = $post_cat_id->categories_id;
         }
         //dd($categories);
-     
         Post::findOrFail($id)->delete();
-
-/*      $categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
-        $posts = DB::table('posts')->where('categories_id', $cat_id)->get();
-
-        return view('/home', [
-            'posts' => $posts,
-            'categories' => $categories,
-            'cat_id' => $id,
-            ]);*/
-
         return redirect()->action('PostController@show', 
             [
                 'id' => $cat_id

@@ -6,6 +6,7 @@ use Blog\User;
 use Blog\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Blog\Contracts\SocialServiceInterface;
 use Socialite;
 use Blog\Social;
 use Illuminate\Support\Facades\Auth;
@@ -83,16 +84,11 @@ class RegisterController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(SocialServiceInterface $social_service)
     {
         $user = Socialite::driver('facebook')->user();
         //dd($user->avatar_original);
-        if(Social::where('email', $user->email)->exists()){
-            //dd($user);
-            // return redirect()->action('LoginController', [
-            //     'email' => $user->email,
-            //     'password' => 'null', 
-            // ]);
+        if($social_service->emailExists($user->email)){
             Auth::loginUsingId((User::where('email', $user->email)->pluck('id')[0]));
             return redirect('/home');
         }
@@ -102,14 +98,7 @@ class RegisterController extends Controller
                 'email' => $user->email,
                 'password' => bcrypt('null'),
             ]);
-            Social::create([
-                'name' => $user->name,
-                'email' => $user->email,
-                'token' => $user->token,
-                'user_id' => User::where('email', $user->email)->pluck('id')[0],
-                'image_path' => $user->avatar_original,
-
-            ]);
+            $social_service->createSocial($user->name, $user->email, $user->token, User::where('email', $user->email)->pluck('id')[0], $user->avatar_original);
         }
 
         // return redirect()->action('LoginController', [

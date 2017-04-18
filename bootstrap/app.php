@@ -52,4 +52,17 @@ $app->singleton(
 |
 */
 
+$app->singleton(
+   'Blog\Contracts\CategoryServiceInterface',
+   'Blog\Services\CategoryService'
+);
+$app->singleton(
+   'Blog\Contracts\PostServiceInterface',
+   'Blog\Services\PostService'
+);
+$app->singleton(
+   'Blog\Contracts\SocialServiceInterface',
+   'Blog\Services\SocialService'
+);
+
 return $app;

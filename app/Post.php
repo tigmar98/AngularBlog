@@ -9,6 +9,6 @@ class Post extends Model
     //
     protected $fillable =
      [
-        'post_title','post_body',
+        'post_topic', 'post', 'creator_id', 'categories_id',
      ];
 }
