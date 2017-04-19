@@ -9,6 +9,12 @@ class Category extends Model
     //
 	protected $fillable =
 	[
-		'category', 'creator_id'
+		'category', 'user_id'
 	];
+	public function user(){
+		return $this->belongsTo('Blog\User');
+	}
+	public function posts(){
+		return $this->hasMany('Blog\Post');
+	}
 }

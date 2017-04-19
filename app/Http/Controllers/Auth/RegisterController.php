@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Blog\Contracts\SocialServiceInterface;
 use Blog\Contracts\UserServiceInterface;
 use Socialite;
+use Blog\User;
 use Illuminate\Support\Facades\Auth;
 
 

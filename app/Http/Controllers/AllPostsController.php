@@ -107,7 +107,7 @@ class AllPostsController extends Controller
      
         $post_service->deletePost($id);
         return redirect()->action('AllPostsController@show', [
-                'id' => $id
+               'id' => $id
             ]);
     }
 

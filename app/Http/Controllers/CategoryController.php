@@ -48,7 +48,7 @@ class CategoryController extends Controller
                 'categoryName' => 'required|max:255',
             ]);
 
-       if ($validator->fails()) {
+       if ($validator->fails()){
             return redirect('/home')
                     ->withInput()
                     ->withErrors($validator);

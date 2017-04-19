@@ -14,4 +14,7 @@ class Social extends Model
     protected $hidden = [
     	'token',
     ];
+    public function user(){
+    	return $this->belongsTo('Blog\User');
+    }
 }

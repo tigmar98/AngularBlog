@@ -9,6 +9,10 @@ class Post extends Model
     //
     protected $fillable =
      [
-        'post_topic', 'post', 'creator_id', 'categories_id',
+        'post_topic', 'post',  'category_id',
      ];
+
+	public function category(){
+		return $this->belongsTo('Blog\Category');
+	}    
 }

@@ -8,8 +8,8 @@ use Blog\Social;
 
 class SocialService implements SocialServiceInterface
 {
-	public function __construct(){
-		$this->social = new Social;
+	public function __construct(Social $social){
+		$this->social = $social;
 
 	}
 	public function createSocial($name, $email, $token, $user_id, $image_path){

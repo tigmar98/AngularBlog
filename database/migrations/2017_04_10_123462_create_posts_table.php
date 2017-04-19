@@ -18,11 +18,10 @@ class CreatePostsTable extends Migration
             $table->increments('id');
             $table->string('post_topic');
             $table->string('post', 255);
-            $table->integer('creator_id')->unsigned();
-            $table->foreign('creator_id')->references('id')->on('users');
-            $table->integer('categories_id')->unsigned();
-            $table->foreign('categories_id')->references('id')->on('categories');
-           // $table->rememberToken();
+            /*$table->integer('creator_id')->unsigned();
+            $table->foreign('creator_id')->references('id')->on('users');*/
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
 

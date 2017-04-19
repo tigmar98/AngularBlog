@@ -26,4 +26,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    public function categories(){
+        return $this->hasMany('Blog\Category');
+    }
+    public function social(){
+        return $this->hasOne('Blog\Social');
+    }
 }

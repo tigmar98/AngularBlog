@@ -23,6 +23,6 @@ Route::resource('category', 'CategoryController');
 Route::get('/postedit/{id}', 'PostController@update');
 Route::get('/categoryedit/{id}', 'CategoryController@update');
 Route::resource('posts', 'AllPostsController');
-Route::put('/imageupload', 'ImageController@store');
+Route::put('/imageupload', 'UserController@storeImage');
 Route::get('auth/facebook', 'Auth\RegisterController@redirectToProvider');
 Route::get('auth/facebook/callback', 'Auth\RegisterController@handleProviderCallback');

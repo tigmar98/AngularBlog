@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 use Blog\Contracts\PostServiceInterface;
 use Blog\Contracts\CategoryServiceInterface;
 use Blog\Contracts\SocialServiceInterface;
-use Blog\Contracts\ImageServiceInterface;
+use Blog\Contracts\UserServiceInterface;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+use Blog\Category;
 
 
 class PostController extends Controller
@@ -23,14 +24,16 @@ class PostController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service, ImageServiceInterface $image_service)
+    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service, UserServiceInterface $user_service)
     {
         //
+
+        //dd(Category::)
         $viaFacebook = 0;
         $categories = $category_service->allUserCategories();
 
-        if($image_service->checkUserImage()){
-            $image_path = "/images/".$image_service->getUserImage();
+        if($user_service->checkUserImage()){
+            $image_path = "/images/".$user_service->getUserImage();
             if(!file_exists(public_path().$image_path)){
                 $image_path = "/images/default-user-image.png";
             }
@@ -41,19 +44,13 @@ class PostController extends Controller
         else{
             $image_path = "/images/default-user-image.png";
         }
-        //dd($categories);
-        //dd($image_path);
-        
         return view('home',
             [
                 'categories' => $categories,
                 'image_path' => $image_path,
                 'viaFacebook' => $viaFacebook,
                 
-            ]);   
-        //dd($image_path);
-        
-        //dd($posts);        
+            ]);    
     }
 
     /**
@@ -82,8 +79,7 @@ class PostController extends Controller
                 'post'  => 'required|max:255',
             ]);
 
-       if ($validator->fails())
-            {//   dd($validator);
+       if ($validator->fails()){
                 return redirect('/home')
                        ->withInput()
                        ->withErrors($validator);
@@ -105,14 +101,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(PostServiceInterface $post_service, SocialServiceInterface $social_service, CategoryServiceInterface $category_service, ImageServiceInterface $image_service, $id)
+    public function show(PostServiceInterface $post_service, SocialServiceInterface $social_service, CategoryServiceInterface $category_service, UserServiceInterface $user_service, $id)
     {
         //Show all posts from choosen category
         $categories = $category_service->allUserCategories();
         $posts = $post_service->getPostsByCategoryId($id);
         $viaFacebook = 0;
-        if($image_service->checkUserImage()){
-            $image_path = "/images/".$image_service->getUserImage();
+        if($user_service->checkUserImage()){
+            $image_path = "/images/".$user_service->getUserImage();
             if(!file_exists(public_path().$image_path)){
                 $image_path = "/images/default-user-image.png";
             }
@@ -153,6 +149,18 @@ class PostController extends Controller
     public function update(PostServiceInterface $post_service, Request $request, $id)
     {
         //Update the choosen post
+        $validator = Validator::make($request->all(), 
+            [
+                'post_topic' => 'required|max:255',
+                'post'  => 'required|max:255',
+            ]);
+
+       if ($validator->fails()){
+                return redirect('/home')
+                       ->withInput()
+                       ->withErrors($validator);
+
+            }
         $post_service->updatePost($id, $request->post_topic, $request->post);
         return redirect()->action('PostController@index');
     }
