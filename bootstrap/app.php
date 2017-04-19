@@ -64,5 +64,13 @@ $app->singleton(
    'Blog\Contracts\SocialServiceInterface',
    'Blog\Services\SocialService'
 );
+$app->singleton(
+   'Blog\Contracts\UserServiceInterface',
+   'Blog\Services\UserService'
+);
+$app->singleton(
+   'Blog\Contracts\ImageServiceInterface',
+   'Blog\Services\ImageService'
+);
 
 return $app;

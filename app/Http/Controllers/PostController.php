@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use Blog\Contracts\PostServiceInterface;
 use Blog\Contracts\CategoryServiceInterface;
 use Blog\Contracts\SocialServiceInterface;
-use Blog\Post;
-use Blog\Category;
-use Blog\Image;
+use Blog\Contracts\ImageServiceInterface;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,15 +23,14 @@ class PostController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service)
+    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service, ImageServiceInterface $image_service)
     {
         //
-        //$categories = DB::table('categories')->where('creator_id', Auth::user()['id'])->get();
         $viaFacebook = 0;
-        $categories = $category_service->allCategories();
+        $categories = $category_service->allUserCategories();
 
-        if(Image::where('user_id', Auth::user()['id'])->exists()){
-            $image_path = "/images/".Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
+        if($image_service->checkUserImage()){
+            $image_path = "/images/".$image_service->getUserImage();
             if(!file_exists(public_path().$image_path)){
                 $image_path = "/images/default-user-image.png";
             }
@@ -56,11 +53,7 @@ class PostController extends Controller
             ]);   
         //dd($image_path);
         
-        //dd($posts);
-        //echo $posts[0]['attributes']['post_topic'];
-        //$post = $posts[0]['attributes']['post_topic'];
-        //die($post);
-        
+        //dd($posts);        
     }
 
     /**
@@ -112,14 +105,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(SocialServiceInterface $social_service, $id)
+    public function show(PostServiceInterface $post_service, SocialServiceInterface $social_service, CategoryServiceInterface $category_service, ImageServiceInterface $image_service, $id)
     {
         //Show all posts from choosen category
-        $categories = Category::where('creator_id', Auth::user()['id'])->get();
-        $posts = Post::where('categories_id', $id)->get();
+        $categories = $category_service->allUserCategories();
+        $posts = $post_service->getPostsByCategoryId($id);
         $viaFacebook = 0;
-        if(Image::where('user_id', Auth::user()['id'])->exists()){
-            $image_path = "/images/".Image::where('user_id', Auth::user()['id'])->orderBy('id', 'desc')->pluck('file_path')[0];
+        if($image_service->checkUserImage()){
+            $image_path = "/images/".$image_service->getUserImage();
             if(!file_exists(public_path().$image_path)){
                 $image_path = "/images/default-user-image.png";
             }
@@ -157,13 +150,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostServiceInterface $post_service, Request $request, $id)
     {
         //Update the choosen post
-        Post::where('id', $id)->update([
-            'post_topic' => $request->post_topic,
-            'post' => $request->post
-            ]);
+        $post_service->updatePost($id, $request->post_topic, $request->post);
         return redirect()->action('PostController@index');
     }
 
@@ -173,15 +163,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PostServiceInterface $post_service, $id)
     {
         //Remove the choosen post
-        $postCatId = Post::where('id', $id)->get();
-        foreach($postCatId as $post_cat_id){
-            $cat_id = $post_cat_id->categories_id;
-        }
+        $cat_id = $post_service->getPostCategoryId($id);
         //dd($categories);
-        Post::findOrFail($id)->delete();
+        $post_service->deletePost($id);
         return redirect()->action('PostController@show', 
             [
                 'id' => $cat_id

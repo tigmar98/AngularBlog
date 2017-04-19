@@ -3,11 +3,11 @@
 namespace Blog\Http\Controllers;
 
 use Blog\Http\Requests;
-use Blog\Image;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Blog\Contracts\ImageServiceInterface;
 
 class ImageController extends Controller
 {
@@ -28,9 +28,9 @@ class ImageController extends Controller
 	 * @return Response
 	 */
 
-  public function store(Request $request)
+  public function store(ImageServiceInterface $image_service, Request $request)
   {
-    $image = new Image();
+    //$image = new Image();
     if($request->hasFile('image')) {
        $file = Input::file('image');
 
@@ -50,13 +50,10 @@ class ImageController extends Controller
        $timestamp = time();
        $name =$timestamp.$file->getClientOriginalName();
        // dd($name);
-       $image->file_path = $name;
-       $image->user_id = Auth::user()['id'];
+       $image_service->createImage($name);
        $file->move(public_path().'/images/', $name);
     }
-    //dd($request);
-    // return;urn $this->create();
-    $image->save();
+    //dd($request);;
     return redirect()->action('PostController@index');
   }
 

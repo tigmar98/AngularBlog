@@ -10,6 +10,6 @@ class Image extends Model
     protected $table = 'images';
     protected $fillable =
      [
-    	'image'
+    	'file_path', 'user_id'
      ];
 }

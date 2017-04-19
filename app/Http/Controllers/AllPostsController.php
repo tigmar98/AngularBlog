@@ -3,10 +3,10 @@
 namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Blog\Post;
-use Blog\Category;
-use Blog\User;
 use Illuminate\Support\Facades\Auth;
+use Blog\Contracts\UserServiceInterface;
+use Blog\Contracts\CategoryServiceInterface;
+use Blog\Contracts\PostServiceInterface;
 
 class AllPostsController extends Controller
 {
@@ -47,13 +47,13 @@ class AllPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PostServiceInterface $post_service, UserServiceInterface $user_service, CategoryServiceInterface $category_service, $id)
     {
         //
-        $posts = Post::get();
+        $posts = $post_service->getAllPosts();
         foreach ($posts as $post) {
-            $post['category'] = Category::where('id', $post['categories_id'])->pluck('category')[0];
-            $post['creator'] = User::where('id', $post['creator_id'])->pluck('name')[0];
+            $post['category'] = $category_service->getCategory($post['categories_id']);
+            $post['creator'] = $user_service->getUserName($post['creator_id']);
             if($post['creator_id'] === Auth::user()['id']){
                 $post['can_edit'] = 1;
             }
@@ -98,17 +98,14 @@ class AllPostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PostServiceInterface $post_service, $id)
     {
         //
         //Remove the choosen post
-        $postCatId = Post::where('id', $id)->get();
-        foreach($postCatId as $post_cat_id){
-            $cat_id = $post_cat_id->categories_id;
-        }
+        $postCatId = $post_service->getPostCategoryId($id);
         //dd($categories);
      
-        Post::findOrFail($id)->delete();
+        $post_service->deletePost($id);
         return redirect()->action('AllPostsController@show', [
                 'id' => $id
             ]);

@@ -15,8 +15,11 @@ class CategoryService implements CategoryServiceInterface
 		$this->post = new Post;
 	}
 
-	public function allCategories(){
+	public function allUserCategories(){
 		return $this->category->where('creator_id', Auth::user()['id'])->get();
+	}
+	public function getCategory($post_category_id){
+		return $this->category->where('id', $post_category_id)->pluck('category')[0];
 	}
 	public function newCategory($category_name){
 		return $this->category->create([

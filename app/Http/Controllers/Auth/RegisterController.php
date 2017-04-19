@@ -2,13 +2,12 @@
 
 namespace Blog\Http\Controllers\Auth;
 
-use Blog\User;
 use Blog\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Blog\Contracts\SocialServiceInterface;
+use Blog\Contracts\UserServiceInterface;
 use Socialite;
-use Blog\Social;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -84,12 +83,12 @@ class RegisterController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback(SocialServiceInterface $social_service)
+    public function handleProviderCallback(SocialServiceInterface $social_service, UserServiceInterface $user_service)
     {
         $user = Socialite::driver('facebook')->user();
         //dd($user->avatar_original);
         if($social_service->emailExists($user->email)){
-            Auth::loginUsingId((User::where('email', $user->email)->pluck('id')[0]));
+            Auth::loginUsingId($user_service->getUserId($user->email));
             return redirect('/home');
         }
         else {
@@ -98,7 +97,7 @@ class RegisterController extends Controller
                 'email' => $user->email,
                 'password' => bcrypt('null'),
             ]);
-            $social_service->createSocial($user->name, $user->email, $user->token, User::where('email', $user->email)->pluck('id')[0], $user->avatar_original);
+            $social_service->createSocial($user->name, $user->email, $user->token, $user_service->getUserId($user->email), $user->avatar_original);
         }
 
         // return redirect()->action('LoginController', [
@@ -107,7 +106,7 @@ class RegisterController extends Controller
         //     ]);
 
         // $user->token;
-        Auth::loginUsingId((User::where('email', $user->email)->pluck('id')[0]));
+        Auth::loginUsingId($user_service->getUserId($user->email));
         return redirect('/home');
     }
 
