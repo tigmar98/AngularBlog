@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             /*$table->integer('creator_id')->unsigned();
             $table->foreign('creator_id')->references('id')->on('users');*/
             $table->integer('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -35,7 +35,8 @@ class CreatePostsTable extends Migration
     public function down()
     {
         //
-           Schema::dropIfExists('posts');
+        $table->dropForeign('posts_category_id_foreign');
+        Schema::dropIfExists('posts');
 
     }
 }

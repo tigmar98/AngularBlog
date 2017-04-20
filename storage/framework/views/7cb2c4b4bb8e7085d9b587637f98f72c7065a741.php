@@ -15,7 +15,6 @@
     <?php echo $__env->yieldContent('links'); ?>
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <?php echo $__env->yieldContent('scripts'); ?>
     <script>
         window.Laravel = <?php echo json_encode([

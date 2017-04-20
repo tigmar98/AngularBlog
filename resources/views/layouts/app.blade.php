@@ -15,7 +15,6 @@
     @yield('links')
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     @yield('scripts')
     <script>
         window.Laravel = {!! json_encode([

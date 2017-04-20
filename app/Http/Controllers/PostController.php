@@ -9,8 +9,6 @@ use Blog\Contracts\SocialServiceInterface;
 use Blog\Contracts\UserServiceInterface;
 use Validator;
 use Illuminate\Support\Facades\Auth;
-use Blog\Category;
-
 
 class PostController extends Controller
 {
@@ -27,8 +25,6 @@ class PostController extends Controller
     public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service, UserServiceInterface $user_service)
     {
         //
-
-        //dd(Category::)
         $viaFacebook = 0;
         $categories = $category_service->allUserCategories();
 
@@ -48,8 +44,7 @@ class PostController extends Controller
             [
                 'categories' => $categories,
                 'image_path' => $image_path,
-                'viaFacebook' => $viaFacebook,
-                
+                'viaFacebook' => $viaFacebook,                
             ]);    
     }
 
@@ -58,10 +53,13 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         //
         //return redirect('/home');
+
+
     }
 
     /**
@@ -70,6 +68,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(PostServiceInterface $post_service, Request $request)
     {
         //Check the post
@@ -87,12 +86,7 @@ class PostController extends Controller
             }
         //Add a new post
         $post_service->newPost($request->post_topic, $request->post, $request->categories_id);
-        //$post_service->newPost('123', '123', '3');
-        
-        return redirect()->action('PostController@show',
-            [
-                'id' => $request->categories_id, 
-            ]);
+        return redirect()->back();
     }
 
     /**
@@ -101,6 +95,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function show(PostServiceInterface $post_service, SocialServiceInterface $social_service, CategoryServiceInterface $category_service, UserServiceInterface $user_service, $id)
     {
         //Show all posts from choosen category
@@ -134,9 +129,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+
+    public function edit(PostServiceInterface $post_service, $id)
     {
         //
+        return view('editpost')->with('post', $post_service->getPost($id));
     }
 
     /**
@@ -146,23 +143,26 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(PostServiceInterface $post_service, Request $request, $id)
     {
         //Update the choosen post
-        $validator = Validator::make($request->all(), 
+
+       $validator = Validator::make($request->all(), 
             [
                 'post_topic' => 'required|max:255',
                 'post'  => 'required|max:255',
             ]);
 
        if ($validator->fails()){
-                return redirect('/home')
-                       ->withInput()
-                       ->withErrors($validator);
+                return redirect()
+                        ->back()
+                        ->withInput()
+                        ->withErrors($validator);
 
             }
         $post_service->updatePost($id, $request->post_topic, $request->post);
-        return redirect()->action('PostController@index');
+        return redirect('/');
     }
 
     /**
@@ -171,15 +171,34 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy(PostServiceInterface $post_service, $id)
     {
         //Remove the choosen post
-        $cat_id = $post_service->getPostCategoryId($id);
-        //dd($categories);
         $post_service->deletePost($id);
-        return redirect()->action('PostController@show', 
-            [
-                'id' => $cat_id
-            ]);
+        return redirect()->back();
+    }
+
+    public function showAllPosts(PostServiceInterface $post_service){
+        $posts = $post_service->getAllPosts();
+
+        foreach ($posts as $post) {
+            $post['creator'] = $post->category->user->name;
+            $post['category'] = $post->category->first()->category;
+            if($post['creator_id'] === Auth::user()['id']){
+                $post['can_edit'] = 1;
+            }
+            else {
+                $post['can_edit'] = 0;
+            }
+        };
+        return view('posts', [
+            'posts' => $posts,
+        ]);
+    }
+
+    public function deletePostFromPosts(PostServiceInterface $post_service, $id){        
+        $post_service->deletePost($id);
+        return redirect()->back();
     }
 }

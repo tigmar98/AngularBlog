@@ -55,7 +55,7 @@ class CategoryController extends Controller
         }
         
         $category_service->newCategory($request->categoryName);
-        return redirect()->action('PostController@index');
+        return redirect('/');
     }
 
     /**
@@ -75,9 +75,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(CategoryServiceInterface $category_service, $id)
     {
         //
+        return view('editcategory')->with('category', $category_service->getCategory($id));
     }
 
     /**
@@ -91,7 +92,7 @@ class CategoryController extends Controller
     {
         //Update choosen category
         $category_service->updateCategory($id, $request->category);
-        return redirect()->action('PostController@index');
+        return redirect('/');
     }
 
     /**
@@ -104,6 +105,6 @@ class CategoryController extends Controller
     {
         //Remove choosen category
         $category_service->deleteCategory($id);
-        return redirect()->action('PostController@index');
+        return redirect()->back();
     }
 }

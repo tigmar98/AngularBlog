@@ -25,10 +25,9 @@
 				<input type="hidden" name="id" class="post_id" value="{{$post->id}}">
 				<input type="hidden" name="can_edit" class="can_edit" value="{{$post->can_edit}}">
 				<span class="post">{{$post->post}}</span>
-				<form action="/posts/{{$post->id}}" method="POST" class="pull-right del_form" style="display: inline">
-					{{csrf_field()}}
-                    {{method_field('Delete')}}
-				</form>
+				{!! Form::open(['url' => '/posts/'.$post->id, 'method' => 'delete'])!!}
+					{!! Form::submit('Delete', array('class' => 'btn btn-danger pull-right')) !!}
+				{!! Form::close()!!}
 			</li>
 		@endforeach
 	</ul>
