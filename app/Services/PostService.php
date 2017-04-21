@@ -20,27 +20,27 @@ class PostService implements PostServiceInterface
 		return $this->post->where('id', $id)->first();
 	}
 
-	public function getPostsByCategoryId($categories_id){
-		return $this->post->where('category_id', $categories_id)->get();
+	public function getPostsByCategoryId($categoriesId){
+		return $this->post->where('categoryId', $categoriesId)->get();
 	}
 
 	public function newPost($data){
 		return $this->post->create([
-			'post_topic' => $data['post_topic'],
+			'postTopic' => $data['postTopic'],
 			'post' => $data['post'],
-			'category_id' => $data['categories_id'],
+			'categoryId' => $data['categoriesId'],
 		]);	
 	}
 
 	public function updatePost($id, $data){
 		return $this->post->where('id', $id)->update([
-				'post_topic' => $data['post_topic'],
+				'postTopic' => $data['postTopic'],
 				'post' => $data['post'],
 			]);
 	}
 
 	public function getPostCategoryId($id){
-		return $this->post->where('id', $id)->pluck('category_id')->first();
+		return $this->post->where('id', $id)->pluck('categoryId')->first();
 	}
 
 	public function deletePost($id){

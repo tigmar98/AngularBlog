@@ -33,10 +33,12 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function create()
+    public function create(Request $request)
     {
         //
-        //return redirect('/home');
+        return view('createPost', [
+                'catId' => $request->catId
+            ]);
 
 
     }
@@ -48,12 +50,12 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(PostServiceInterface $post_service, Request $request)
+    public function store(PostServiceInterface $postService, Request $request)
     {
         //Check the post
         $validator = Validator::make($request->all(), 
             [
-                'post_topic' => 'required|max:255',
+                'postTopic' => 'required|max:255',
                 'post'  => 'required|max:255',
             ]);
 
@@ -64,8 +66,9 @@ class PostController extends Controller
 
             }
         //Add a new post
-        $post_service->newPost($request->all());
-        return redirect()->back();
+        $postService->newPost($request->all());
+        //return redirect()->back();
+        return redirect('/');
     }
 
     /**
@@ -87,10 +90,10 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function edit(PostServiceInterface $post_service, $id)
+    public function edit(PostServiceInterface $postService, $id)
     {
         //
-        return view('editpost')->with('post', $post_service->getPost($id));
+        return view('editPost')->with('post', $postService->getPost($id));
     }
 
     /**
@@ -101,13 +104,13 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(PostServiceInterface $post_service, Request $request, $id)
+    public function update(PostServiceInterface $postService, Request $request, $id)
     {
         //Update the choosen post
 
        $validator = Validator::make($request->all(), 
             [
-                'post_topic' => 'required|max:255',
+                'postTopic' => 'required|max:255',
                 'post'  => 'required|max:255',
             ]);
 
@@ -118,7 +121,7 @@ class PostController extends Controller
                         ->withErrors($validator);
 
             }
-        $post_service->updatePost($id, $request->all());
+        $postService->updatePost($id, $request->all());
         return redirect('/');
     }
 
@@ -129,24 +132,24 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(PostServiceInterface $post_service, $id)
+    public function destroy(PostServiceInterface $postService, $id)
     {
         //Remove the choosen post
-        $post_service->deletePost($id);
+        $postService->deletePost($id);
         return redirect()->back();
     }
 
-    public function showAllPosts(PostServiceInterface $post_service){
-        $posts = $post_service->getAllPosts();
+    public function showAllPosts(PostServiceInterface $postService){
+        $posts = $postService->getAllPosts();
         
         foreach ($posts as $post){
             $post['creator'] = $post->category->user->name;
             //dd($post->category->user->id);
             if($post->category->user->id == Auth::user()['id']){
-                $post['can_edit'] = 1;
+                $post['canEdit'] = 1;
             }
             else {
-                $post['can_edit'] = 0;
+                $post['canEdit'] = 0;
             }
             $post['category'] = $post->category->category;
         };

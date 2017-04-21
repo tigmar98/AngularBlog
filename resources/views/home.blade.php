@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('links')
-    <link rel="stylesheet" type="text/css" href=" {{ asset('css/home_style.css') }} ">
+    <link rel="stylesheet" type="text/css" href=" {{ asset('css/homeStyle.css') }} ">
 @endsection
 
 
 @section('navbar')
     <li>
         {!! Form::open(['url' => '/showallposts', 'method' => 'get']) !!}
-            {!! Form::submit('Posts', array('class' => 'all_post_button'))!!}
+            {!! Form::submit('Posts', array('class' => 'allPostButton'))!!}
         {!! Form::close() !!}
     </li>
 @endsection
@@ -19,7 +19,7 @@
         
         <div class="row">
             <div class="col-sm-4">
-                <img src="{{$image_path}}" class="profile_pic">
+                <img src="{{$imagePath}}" class="profilePic">
             </div>
         </div>
         {!! Form::open(['url' => '/imageuploadform', 'method' => 'get']) !!}
@@ -34,29 +34,29 @@
                     <div class="panel-heading">Categories</div>
                     <div class="panel-body">
                         <div>
-                            {!! Form::open(['url' => '/category']) !!}
-                                {!! Form::text('categoryName') !!}
-                                {!! Form::submit('Add A New Category', array('class' => 'btn btn-success pull-right')) !!}
-                                {{ csrf_field() }}
+                            {!! Form::open(['url' => '/category/create', 'method' => 'get']) !!}
+                                {!! Form::submit('Add Category', array('class' => 'btn btn-success')) !!}
                             {!! Form::close() !!}
                         </div>
-                        <ul class="list-group">
-                            @foreach($categories as $category)
-                               <li class="list-group-item"> 
-                                    {!! Form::open(['url' => '/home/'.$category->id, 'method' => 'get']) !!}
-                                        {!! Form::submit($category->category, array('class' => 'btn btn-primary catButt')) !!}
-                                    {!! Form::close() !!}
-                                    {!! Form::open(['url' => '/category/'.$category->id, 'method' => 'delete']) !!}
-                                        {!! Form::submit('Delete', array('class' => 'btn btn-danger pull-right')) !!}
-                                        {{csrf_field()}}
-                                    {!! Form::close() !!}
-                                    {!! Form::open(['url' => '/category/'.$category->id.'/edit', 'method' => 'get']) !!}
-                                        {!! Form::submit('Edit', array('class' => 'btn btn-warning pull-right')) !!}
-                                        {{csrf_field()}}
-                                    {!! Form::close() !!}
-                                </li>
-                            @endforeach
-                        </ul>
+                        <div>
+                            <ul class="list-group">
+                                @foreach($categories as $category)
+                                   <li class="list-group-item"> 
+                                        {!! Form::open(['url' => '/home/'.$category->id, 'method' => 'get']) !!}
+                                            {!! Form::submit($category->category, array('class' => 'btn btn-primary catButt')) !!}
+                                        {!! Form::close() !!}
+                                        {!! Form::open(['url' => '/category/'.$category->id, 'method' => 'delete']) !!}
+                                            {!! Form::submit('Delete', array('class' => 'btn btn-danger pull-right')) !!}
+                                            {{csrf_field()}}
+                                        {!! Form::close() !!}
+                                        {!! Form::open(['url' => '/category/'.$category->id.'/edit', 'method' => 'get']) !!}
+                                            {!! Form::submit('Edit', array('class' => 'btn btn-warning pull-right')) !!}
+                                            {{csrf_field()}}
+                                        {!! Form::close() !!}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,19 +71,16 @@
 
                         <div class="panel-body">
                             <div>
-                                {!! Form::open(['url' => '/post'])!!}
-                                    {!! Form::text('post_topic', 'Post Topic...')!!}
-                                    {!! Form::text('post', 'Post')!!}
-                                    {!! Form::hidden('categories_id', "$cat_id")!!}
-                                    {!! Form::submit('Add new post', array('class' => 'btn btn-success'))!!}
-                                    {{ csrf_field() }}
-                                {!! Form::close()!!} 
+                                {!! Form::open(['url' => '/post/create', 'method' => 'get']) !!}
+                                    {!! Form::submit('Create new post', array('class' => 'btn btn-success'))!!}
+                                    {!! Form::hidden('catId', $catId) !!}
+                                {!! Form::close()!!}
                             </div>
                             <ul class="list-group">
                                 @foreach($posts as $post)
                                     <li class="list-group-item" style="text-align:left">
-                                        <p class="post_p">
-                                           <strong><span class="post_topic">{{$post->post_topic}}</span></strong>
+                                        <p class="postP">
+                                           <strong><span class="post_topic">{{$post->postTopic}}</span></strong>
                                            <span class="post">{{$post->post}}</span>
                                         </p>
                                               

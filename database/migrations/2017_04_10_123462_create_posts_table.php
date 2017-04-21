@@ -16,12 +16,10 @@ class CreatePostsTable extends Migration
         //
             Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('post_topic');
+            $table->string('postTopic');
             $table->string('post', 255);
-            /*$table->integer('creator_id')->unsigned();
-            $table->foreign('creator_id')->references('id')->on('users');*/
-            $table->integer('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->integer('categoryId')->unsigned();
+            $table->foreign('categoryId')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -35,7 +33,7 @@ class CreatePostsTable extends Migration
     public function down()
     {
         //
-        $table->dropForeign('posts_category_id_foreign');
+        $table->dropForeign('posts_categoryId_foreign');
         Schema::dropIfExists('posts');
 
     }

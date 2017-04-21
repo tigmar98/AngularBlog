@@ -13,13 +13,13 @@ class SocialService implements SocialServiceInterface
 
 	}
 
-	public function createSocial($name, $email, $token, $user_id, $image_path){
+	public function createSocial($name, $email, $token, $userId, $imagePath){
 		return $this->social->create([
 				'name' => $name,
 				'email' => $email,
 				'token' => $token,
-				'user_id' => $user_id,
-				'image_path' => $image_path,
+				'userId' => $userId,
+				'imagePath' => $imagePath,
 			]);
 	}
 
@@ -28,11 +28,11 @@ class SocialService implements SocialServiceInterface
 	}
 
 	public function userExists(){
-		return $this->social->where('user_id', Auth::user()['id'])->exists();
+		return $this->social->where('userId', Auth::user()['id'])->exists();
 	}
 	
 	public function getImage(){
-		return $this->social->where('user_id', Auth::user()['id'])->pluck('image_path')[0];
+		return $this->social->where('userId', Auth::user()['id'])->pluck('imagePath')[0];
 	}
 
 }

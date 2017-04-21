@@ -14,17 +14,17 @@ class CategoryService implements CategoryServiceInterface
 	}
 
 	public function allUserCategories(){
-		return $this->category->where('user_id', Auth::user()['id'])->get();
+		return $this->category->where('userId', Auth::user()['id'])->get();
 	}
 
 	public function getCategory($id){
 		return $this->category->where('id', $id)->first();
 	}
 
-	public function newCategory($category_name){
+	public function newCategory($categoryName){
 		return $this->category->create([
-				'category' => $category_name,
-				'user_id' => Auth::user()['id'],
+				'category' => $categoryName,
+				'userId' => Auth::user()['id'],
 			]);
 	}
 

@@ -1,0 +1,15 @@
+.postP{
+	display:inline-block;
+}
+.allPostButton{
+	background:none;
+	border: none;
+	margin-top:13px;
+}
+.profilePic{
+	width:150px;
+	height:150px;
+}
+form{
+	display: inline;
+}

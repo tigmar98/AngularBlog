@@ -29,9 +29,10 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+        return view('createCategory');
     }
 
     /**
@@ -40,7 +41,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryServiceInterface $category_service, Request $request)
+    public function store(CategoryServiceInterface $categoryService, Request $request)
     {
         //Add new category
         $validator = Validator::make($request->all(), 
@@ -54,7 +55,7 @@ class CategoryController extends Controller
                     ->withErrors($validator);
         }
         
-        $category_service->newCategory($request->categoryName);
+        $categoryService->newCategory($request->categoryName);
         return redirect('/');
     }
 
@@ -75,10 +76,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CategoryServiceInterface $category_service, $id)
+    public function edit(CategoryServiceInterface $categoryService, $id)
     {
         //
-        return view('editcategory')->with('category', $category_service->getCategory($id));
+        return view('editCategory')->with('category', $categoryService->getCategory($id));
     }
 
     /**
@@ -88,10 +89,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryServiceInterface $category_service, Request $request, $id)
+    public function update(CategoryServiceInterface $categoryService, Request $request, $id)
     {
         //Update choosen category
-        $category_service->updateCategory($id, $request->category);
+        $categoryService->updateCategory($id, $request->category);
         return redirect('/');
     }
 
@@ -101,10 +102,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CategoryServiceInterface $category_service, $id)
+    public function destroy(CategoryServiceInterface $categoryService, $id)
     {
         //Remove choosen category
-        $category_service->deleteCategory($id);
+        $categoryService->deleteCategory($id);
         return redirect()->back();
     }
 }

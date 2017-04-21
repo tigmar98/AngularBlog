@@ -27,9 +27,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     public function categories(){
-        return $this->hasMany('Blog\Category');
+        return $this->hasMany('Blog\Category', 'userId');
     }
     public function social(){
-        return $this->hasOne('Blog\Social');
+        return $this->hasOne('Blog\Social', 'userId');
     }
 }

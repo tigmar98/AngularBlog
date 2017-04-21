@@ -19,9 +19,9 @@ class CreateSocialsTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('token');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('image_path');
+            $table->integer('userId')->unsigned();
+            $table->foreign('userId')->references('id')->on('users');
+            $table->string('imagePath');
             $table->rememberToken();
             $table->timestamps();
         });

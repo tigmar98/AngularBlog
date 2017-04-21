@@ -8,13 +8,13 @@ class Social extends Model
 {
     //
     protected $fillable = [
-    	'name', 'email', 'token', 'user_id','image_path'
+    	'name', 'email', 'token', 'userId','imagePath'
     ];
 
     protected $hidden = [
     	'token',
     ];
     public function user(){
-    	return $this->belongsTo('Blog\User');
+    	return $this->belongsTo('Blog\User', 'userId');
     }
 }

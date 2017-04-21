@@ -16,8 +16,8 @@ class UserService implements UserServiceInterface
 		return $this->user->where('email', $email)->pluck('id')->first();
 	}
 
-	public function getUserName($creator_id){
-		return $this->user->where('id', $creator_id)->pluck('name')->first();
+	public function getUserName($creatorId){
+		return $this->user->where('id', $creatorId)->pluck('name')->first();
 	}
 
 	public function storeImage($image){

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('links')
-    <link rel="stylesheet" type="text/css" href=" {{ asset('css/posts_style.css') }} ">
+    <link rel="stylesheet" type="text/css" href=" {{ asset('css/postsStyle.css') }} ">
 @endsection
 
 @section('navbar')
@@ -19,7 +19,7 @@
 				<span class="pull-right category_span">{{$post->category}}</span>
 				<strong><span class="pull-right">{{$post->creator}} :</span></strong><br>
 				<span class="post">{{$post->post}}</span>
-				@if($post->can_edit === 1)
+				@if($post->canEdit === 1)
 					{!! Form::open(['url' => '/post/'.$post->id, 'method' => 'delete'])!!}
 						{!! Form::submit('Delete', array('class' => 'btn btn-danger pull-right')) !!}
 					{!! Form::close()!!}

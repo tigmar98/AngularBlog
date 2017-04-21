@@ -14,10 +14,10 @@ class UserController extends Controller
 {
     //
 	public function showImageUploadForm(){
-		return view('imageupload');
+		return view('imageUpload');
 	}
 
-	public function storeImage(UserServiceInterface $user_service, Request $request)
+	public function storeImage(UserServiceInterface $userService, Request $request)
   	{
     	if($request->hasFile('image')){
        		$file = Input::file('image');
@@ -33,7 +33,7 @@ class UserController extends Controller
 
 	       $timestamp = time();
 	       $name =$timestamp.$file->getClientOriginalName();
-	       $user_service->storeImage($name);
+	       $userService->storeImage($name);
 	       $file->move(public_path().'/images/', $name);
     	}
     	return redirect('/');

@@ -25,50 +25,50 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service, UserServiceInterface $user_service)
+    public function index(CategoryServiceInterface $categoryService, SocialServiceInterface $socialService, UserServiceInterface $userService)
     {
         //
-        $categories = $category_service->allUserCategories();
+        $categories = $categoryService->allUserCategories();
 
-        if($user_service->checkUserImage()){
-            $image_path = "/images/".$user_service->getUserImage();
-            if(!file_exists(public_path().$image_path)){
-                $image_path = "/images/default-user-image.png";
+        if($userService->checkUserImage()){
+            $imagePath = "/images/".$userService->getUserImage();
+            if(!file_exists(public_path().$imagePath)){
+                $imagePath = "/images/default-user-image.png";
             }
-        } elseif($social_service->userExists()){
-            $image_path = $social_service->getImage();
+        } elseif($socialService->userExists()){
+            $imagePath = $socialService->getImage();
         }
         else{
-            $image_path = "/images/default-user-image.png";
+            $imagePath = "/images/default-user-image.png";
         }
         return view('home',
             [
                 'categories' => $categories,
-                'image_path' => $image_path,                
+                'imagePath' => $imagePath,                
             ]);    
     }
 
-     public function show(PostServiceInterface $post_service, SocialServiceInterface $social_service, CategoryServiceInterface $category_service, UserServiceInterface $user_service, $id)
+     public function show(PostServiceInterface $postService, SocialServiceInterface $socialService, CategoryServiceInterface $categoryService, UserServiceInterface $userService, $id)
     {
         //Show all posts from choosen category
-        $categories = $category_service->allUserCategories();
-        $posts = $post_service->getPostsByCategoryId($id);
-        if($user_service->checkUserImage()){
-            $image_path = "/images/".$user_service->getUserImage();
-            if(!file_exists(public_path().$image_path)){
-                $image_path = "/images/default-user-image.png";
+        $categories = $categoryService->allUserCategories();
+        $posts = $postService->getPostsByCategoryId($id);
+        if($userService->checkUserImage()){
+            $imagePath = "/images/".$userService->getUserImage();
+            if(!file_exists(public_path().$imagePath)){
+                $imagePath = "/images/default-user-image.png";
             }
-        } elseif($social_service->userExists()){
-            $image_path = $social_service->getImage();
+        } elseif($socialService->userExists()){
+            $imagePath = $socialService->getImage();
         }
         else{
-            $image_path = "/images/default-user-image.png";
+            $imagePath = "/images/default-user-image.png";
         }
         return view('home', [
             'posts' => $posts,
             'categories' => $categories,
-            'cat_id' => $id,
-            'image_path' => $image_path,
+            'catId' => $id,
+            'imagePath' => $imagePath,
         ]);
     }
 }

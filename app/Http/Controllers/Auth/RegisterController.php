@@ -84,12 +84,12 @@ class RegisterController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback(SocialServiceInterface $social_service, UserServiceInterface $user_service)
+    public function handleProviderCallback(SocialServiceInterface $socialService, UserServiceInterface $userService)
     {
         $user = Socialite::driver('facebook')->user();
         //dd($user->avatar_original);
-        if($social_service->emailExists($user->email)){
-            Auth::loginUsingId($user_service->getUserId($user->email));
+        if($socialService->emailExists($user->email)){
+            Auth::loginUsingId($userService->getUserId($user->email));
             return redirect('/home');
         }
         else {
@@ -98,7 +98,7 @@ class RegisterController extends Controller
                 'email' => $user->email,
                 'password' => bcrypt('null'),
             ]);
-            $social_service->createSocial($user->name, $user->email, $user->token, $user_service->getUserId($user->email), $user->avatar_original);
+            $socialService->createSocial($user->name, $user->email, $user->token, $user_service->getUserId($user->email), $user->avatar_original);
         }
 
         // return redirect()->action('LoginController', [
@@ -107,7 +107,7 @@ class RegisterController extends Controller
         //     ]);
 
         // $user->token;
-        Auth::loginUsingId($user_service->getUserId($user->email));
+        Auth::loginUsingId($userService->getUserId($user->email));
         return redirect('/home');
     }
 
