@@ -17,12 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('home', 'PostController');
+Route::resource('home', 'HomeController');
+Route::resource('post', 'PostController');
 Route::resource('category', 'CategoryController');
 Route::get('/postedit/{id}', 'PostController@update');
 Route::get('/categoryedit/{id}', 'CategoryController@update');
+Route::get('/imageuploadform', 'UserController@showImageUploadForm');
 Route::put('/imageupload', 'UserController@storeImage');
 Route::get('auth/facebook', 'Auth\RegisterController@redirectToProvider');
 Route::get('auth/facebook/callback', 'Auth\RegisterController@handleProviderCallback');
 Route::get('/showallposts', 'PostController@showAllPosts');
-Route::delete('/posts/{id}', 'PostController@deletePostFromPosts');
+

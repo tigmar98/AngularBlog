@@ -7,8 +7,8 @@ Interface PostServiceInterface
 	public function getAllPosts();
 	public function getPost($id);
 	public function getPostsByCategoryId($categories_id);
-	public function newPost($post_topic, $post, $categories_id);
-	public function updatePost($id, $post_topic, $post);
+	public function newPost($post);
+	public function updatePost($id, $data);
 	public function getPostCategoryId($id);
 	public function deletePost($id);
 }

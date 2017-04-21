@@ -20,17 +20,11 @@
         <div class="row">
             <div class="col-sm-4">
                 <img src="{{$image_path}}" class="profile_pic">
-                @if($viaFacebook === 0 )
-                    <form action="/imageupload" method="POST" enctype="multipart/form-data">
-                        <!--<input type="text" name="inp">-->
-                        <input type="file" name="image">
-                        <button type="submit">Add photo</button>
-                        {{method_field('PUT')}}
-                        {{ csrf_field() }}
-                    </form>
-                @endif
             </div>
         </div>
+        {!! Form::open(['url' => '/imageuploadform', 'method' => 'get']) !!}
+            {!! Form::submit('Upload Image') !!}
+        {!! Form::close() !!}
 
 
         <div class="row">
@@ -40,18 +34,18 @@
                     <div class="panel-heading">Categories</div>
                     <div class="panel-body">
                         <div>
-                            <form action="/category" method="POST">
+                            {!! Form::open(['url' => '/category']) !!}
+                                {!! Form::text('categoryName') !!}
+                                {!! Form::submit('Add A New Category', array('class' => 'btn btn-success pull-right')) !!}
                                 {{ csrf_field() }}
-                                <input type="text" name="categoryName" required>
-                                <button type="submit" class="btn btn-primary">Add A New Category</button>
-                            </form>
+                            {!! Form::close() !!}
                         </div>
                         <ul class="list-group">
                             @foreach($categories as $category)
                                <li class="list-group-item"> 
-                                    <form action="/home/{{$category->id}}" method="GET" style="display:inline">
-                                        <button type="submit" class="btn btn-primary catButt">{{$category->category}}</button>
-                                    </form>
+                                    {!! Form::open(['url' => '/home/'.$category->id, 'method' => 'get']) !!}
+                                        {!! Form::submit($category->category, array('class' => 'btn btn-primary catButt')) !!}
+                                    {!! Form::close() !!}
                                     {!! Form::open(['url' => '/category/'.$category->id, 'method' => 'delete']) !!}
                                         {!! Form::submit('Delete', array('class' => 'btn btn-danger pull-right')) !!}
                                         {{csrf_field()}}
@@ -67,8 +61,9 @@
                 </div>
             </div>
 
-            @include('common.errors')
-
+            <div class="col-md-5">
+                @include('common.errors')
+            </div>
             @if(isset($posts))
                 <div class="col-md-8">
                     <div class="panel panel-default">
@@ -76,7 +71,7 @@
 
                         <div class="panel-body">
                             <div>
-                                {!! Form::open(['url' => '/home'])!!}
+                                {!! Form::open(['url' => '/post'])!!}
                                     {!! Form::text('post_topic', 'Post Topic...')!!}
                                     {!! Form::text('post', 'Post')!!}
                                     {!! Form::hidden('categories_id', "$cat_id")!!}
@@ -92,13 +87,13 @@
                                            <span class="post">{{$post->post}}</span>
                                         </p>
                                               
-                                        {!! Form::open(['url' => '/home/'.$post->id]) !!}
+                                        {!! Form::open(['url' => '/post/'.$post->id]) !!}
                                             {!! Form::submit('Delete', array('class' => 'btn btn-danger pull-right')) !!}
                                             {{method_field('Delete')}}
                                             {{csrf_field()}}
                                         {!! Form::close() !!}
 
-                                        {!! Form::open(['url' => '/home/'.$post->id.'/edit', 'method' =>'get']) !!}
+                                        {!! Form::open(['url' => '/post/'.$post->id.'/edit', 'method' =>'get']) !!}
                                             {!! Form::submit('Show Post', array('class' => 'btn btn-warning pull-right')) !!} 
                                             {{csrf_field()}}
                                         {!! Form::close() !!}

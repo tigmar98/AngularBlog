@@ -22,30 +22,9 @@ class PostController extends Controller
         $this->middleware('auth');
     }
     
-    public function index(CategoryServiceInterface $category_service, SocialServiceInterface $social_service, UserServiceInterface $user_service)
+    public function index()
     {
-        //
-        $viaFacebook = 0;
-        $categories = $category_service->allUserCategories();
-
-        if($user_service->checkUserImage()){
-            $image_path = "/images/".$user_service->getUserImage();
-            if(!file_exists(public_path().$image_path)){
-                $image_path = "/images/default-user-image.png";
-            }
-        } elseif($social_service->userExists()){
-            $image_path = $social_service->getImage();
-            $viaFacebook = 1;
-        }
-        else{
-            $image_path = "/images/default-user-image.png";
-        }
-        return view('home',
-            [
-                'categories' => $categories,
-                'image_path' => $image_path,
-                'viaFacebook' => $viaFacebook,                
-            ]);    
+       
     }
 
     /**
@@ -85,7 +64,7 @@ class PostController extends Controller
 
             }
         //Add a new post
-        $post_service->newPost($request->post_topic, $request->post, $request->categories_id);
+        $post_service->newPost($request->all());
         return redirect()->back();
     }
 
@@ -96,31 +75,9 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show(PostServiceInterface $post_service, SocialServiceInterface $social_service, CategoryServiceInterface $category_service, UserServiceInterface $user_service, $id)
+    public function show($id)
     {
-        //Show all posts from choosen category
-        $categories = $category_service->allUserCategories();
-        $posts = $post_service->getPostsByCategoryId($id);
-        $viaFacebook = 0;
-        if($user_service->checkUserImage()){
-            $image_path = "/images/".$user_service->getUserImage();
-            if(!file_exists(public_path().$image_path)){
-                $image_path = "/images/default-user-image.png";
-            }
-        } elseif($social_service->userExists()){
-            $image_path = $social_service->getImage();
-            $viaFacebook = 1;
-        }
-        else{
-            $image_path = "/images/default-user-image.png";
-        }
-        return view('home', [
-            'posts' => $posts,
-            'categories' => $categories,
-            'cat_id' => $id,
-            'image_path' => $image_path,
-            'viaFacebook' => $viaFacebook,
-        ]);
+       
     }
 
     /**
@@ -161,7 +118,7 @@ class PostController extends Controller
                         ->withErrors($validator);
 
             }
-        $post_service->updatePost($id, $request->post_topic, $request->post);
+        $post_service->updatePost($id, $request->all());
         return redirect('/');
     }
 
@@ -181,24 +138,20 @@ class PostController extends Controller
 
     public function showAllPosts(PostServiceInterface $post_service){
         $posts = $post_service->getAllPosts();
-
-        foreach ($posts as $post) {
+        
+        foreach ($posts as $post){
             $post['creator'] = $post->category->user->name;
-            $post['category'] = $post->category->first()->category;
-            if($post['creator_id'] === Auth::user()['id']){
+            //dd($post->category->user->id);
+            if($post->category->user->id == Auth::user()['id']){
                 $post['can_edit'] = 1;
             }
             else {
                 $post['can_edit'] = 0;
             }
+            $post['category'] = $post->category->category;
         };
         return view('posts', [
             'posts' => $posts,
         ]);
-    }
-
-    public function deletePostFromPosts(PostServiceInterface $post_service, $id){        
-        $post_service->deletePost($id);
-        return redirect()->back();
     }
 }

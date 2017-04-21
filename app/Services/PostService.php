@@ -24,18 +24,18 @@ class PostService implements PostServiceInterface
 		return $this->post->where('category_id', $categories_id)->get();
 	}
 
-	public function newPost($post_topic, $post, $categories_id){
+	public function newPost($data){
 		return $this->post->create([
-			'post_topic' => $post_topic,
-			'post' => $post,
-			'category_id' =>$categories_id,
+			'post_topic' => $data['post_topic'],
+			'post' => $data['post'],
+			'category_id' => $data['categories_id'],
 		]);	
 	}
 
-	public function updatePost($id, $post_topic, $post){
+	public function updatePost($id, $data){
 		return $this->post->where('id', $id)->update([
-				'post_topic' => $post_topic,
-				'post' => $post,
+				'post_topic' => $data['post_topic'],
+				'post' => $data['post'],
 			]);
 	}
 

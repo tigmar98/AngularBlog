@@ -13,6 +13,10 @@ use Blog\Contracts\UserServiceInterface;
 class UserController extends Controller
 {
     //
+	public function showImageUploadForm(){
+		return view('imageupload');
+	}
+
 	public function storeImage(UserServiceInterface $user_service, Request $request)
   	{
     	if($request->hasFile('image')){
@@ -32,6 +36,6 @@ class UserController extends Controller
 	       $user_service->storeImage($name);
 	       $file->move(public_path().'/images/', $name);
     	}
-    	return redirect()->action('PostController@index');
+    	return redirect('/');
   	}
 }

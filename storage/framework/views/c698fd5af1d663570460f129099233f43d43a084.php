@@ -21,19 +21,14 @@
         <div class="row">
             <div class="col-sm-4">
                 <img src="<?php echo e($image_path); ?>" class="profile_pic">
-                <?php if($viaFacebook === 0 ): ?>
-                    <form action="/imageupload" method="POST" enctype="multipart/form-data">
-                        <!--<input type="text" name="inp">-->
-                        <input type="file" name="image">
-                        <button type="submit">Add photo</button>
-                        <?php echo e(method_field('PUT')); ?>
-
-                        <?php echo e(csrf_field()); ?>
-
-                    </form>
-                <?php endif; ?>
             </div>
         </div>
+        <?php echo Form::open(['url' => '/imageuploadform', 'method' => 'get']); ?>
+
+            <?php echo Form::submit('Upload Image'); ?>
+
+        <?php echo Form::close(); ?>
+
 
 
         <div class="row">
@@ -43,19 +38,26 @@
                     <div class="panel-heading">Categories</div>
                     <div class="panel-body">
                         <div>
-                            <form action="/category" method="POST">
+                            <?php echo Form::open(['url' => '/category']); ?>
+
+                                <?php echo Form::text('categoryName'); ?>
+
+                                <?php echo Form::submit('Add A New Category', array('class' => 'btn btn-success pull-right')); ?>
+
                                 <?php echo e(csrf_field()); ?>
 
-                                <input type="text" name="categoryName" required>
-                                <button type="submit" class="btn btn-primary">Add A New Category</button>
-                            </form>
+                            <?php echo Form::close(); ?>
+
                         </div>
                         <ul class="list-group">
                             <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                <li class="list-group-item"> 
-                                    <form action="/home/<?php echo e($category->id); ?>" method="GET" style="display:inline">
-                                        <button type="submit" class="btn btn-primary catButt"><?php echo e($category->category); ?></button>
-                                    </form>
+                                    <?php echo Form::open(['url' => '/home/'.$category->id, 'method' => 'get']); ?>
+
+                                        <?php echo Form::submit($category->category, array('class' => 'btn btn-primary catButt')); ?>
+
+                                    <?php echo Form::close(); ?>
+
                                     <?php echo Form::open(['url' => '/category/'.$category->id, 'method' => 'delete']); ?>
 
                                         <?php echo Form::submit('Delete', array('class' => 'btn btn-danger pull-right')); ?>
@@ -79,8 +81,9 @@
                 </div>
             </div>
 
-            <?php echo $__env->make('common.errors', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-
+            <div class="col-md-5">
+                <?php echo $__env->make('common.errors', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+            </div>
             <?php if(isset($posts)): ?>
                 <div class="col-md-8">
                     <div class="panel panel-default">
@@ -88,7 +91,7 @@
 
                         <div class="panel-body">
                             <div>
-                                <?php echo Form::open(['url' => '/home']); ?>
+                                <?php echo Form::open(['url' => '/post']); ?>
 
                                     <?php echo Form::text('post_topic', 'Post Topic...'); ?>
 
@@ -110,7 +113,7 @@
                                            <span class="post"><?php echo e($post->post); ?></span>
                                         </p>
                                               
-                                        <?php echo Form::open(['url' => '/home/'.$post->id]); ?>
+                                        <?php echo Form::open(['url' => '/post/'.$post->id]); ?>
 
                                             <?php echo Form::submit('Delete', array('class' => 'btn btn-danger pull-right')); ?>
 
@@ -121,7 +124,7 @@
                                         <?php echo Form::close(); ?>
 
 
-                                        <?php echo Form::open(['url' => '/home/'.$post->id.'/edit', 'method' =>'get']); ?>
+                                        <?php echo Form::open(['url' => '/post/'.$post->id.'/edit', 'method' =>'get']); ?>
 
                                             <?php echo Form::submit('Show Post', array('class' => 'btn btn-warning pull-right')); ?> 
                                             <?php echo e(csrf_field()); ?>
