@@ -27,12 +27,12 @@ class SocialService implements SocialServiceInterface
 		return $this->social->where('email', $email)->exists();
 	}
 
-	public function userExists(){
+	/*public function userExists(){
 		return $this->social->where('userId', Auth::user()['id'])->exists();
-	}
+	}*/
 	
-	public function getImage(){
-		return $this->social->where('userId', Auth::user()['id'])->pluck('imagePath')[0];
-	}
+	/*public function getImage(){
+		return $this->social->where('userId', Auth::user()['id'])->pluck('imagePath')->first();
+	}*/
 
 }

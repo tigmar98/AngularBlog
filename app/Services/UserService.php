@@ -27,7 +27,18 @@ class UserService implements UserServiceInterface
 	}
 
 	public function getUserImage(){
-		return $this->user->where('id', Auth::user()['id'])->pluck('image')->first();
+		if(!empty($this->user->where('id', Auth::user()['id'])->pluck('image')->first())){
+			$imagePath = "/images/".$this->user->where('id', Auth::user()['id'])->pluck('image')->first();
+			if(!file_exists(public_path().$imagePath)){
+            	$imagePath = "/images/default-user-image.png";
+            	}
+            } elseif($this->user->where('id', Auth::user()['id'])->first()->social->exists()){
+            	$imagePath = $this->user->where('id', Auth::user()['id'])->first()->social->pluck('imagePath')->first();
+            } else {
+            	$imagePath = "/images/default-user-image.png";
+            }
+        return $imagePath;
+		//return $this->user->where('id', Auth::user()['id'])->pluck('image')->first();
 	}
 
 	public function checkUserImage(){

@@ -25,22 +25,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(CategoryServiceInterface $categoryService, SocialServiceInterface $socialService, UserServiceInterface $userService)
+    public function index(CategoryServiceInterface $categoryService,  UserServiceInterface $userService)
     {
         //
         $categories = $categoryService->allUserCategories();
-
-        if($userService->checkUserImage()){
-            $imagePath = "/images/".$userService->getUserImage();
-            if(!file_exists(public_path().$imagePath)){
-                $imagePath = "/images/default-user-image.png";
-            }
-        } elseif($socialService->userExists()){
-            $imagePath = $socialService->getImage();
-        }
-        else{
-            $imagePath = "/images/default-user-image.png";
-        }
+        $imagePath = $userService->getUserImage();
         return view('home',
             [
                 'categories' => $categories,
@@ -48,22 +37,12 @@ class HomeController extends Controller
             ]);    
     }
 
-     public function show(PostServiceInterface $postService, SocialServiceInterface $socialService, CategoryServiceInterface $categoryService, UserServiceInterface $userService, $id)
+     public function show(PostServiceInterface $postService, CategoryServiceInterface $categoryService, UserServiceInterface $userService, $id)
     {
         //Show all posts from choosen category
         $categories = $categoryService->allUserCategories();
         $posts = $postService->getPostsByCategoryId($id);
-        if($userService->checkUserImage()){
-            $imagePath = "/images/".$userService->getUserImage();
-            if(!file_exists(public_path().$imagePath)){
-                $imagePath = "/images/default-user-image.png";
-            }
-        } elseif($socialService->userExists()){
-            $imagePath = $socialService->getImage();
-        }
-        else{
-            $imagePath = "/images/default-user-image.png";
-        }
+        $imagePath = $userService->getUserImage();
         return view('home', [
             'posts' => $posts,
             'categories' => $categories,

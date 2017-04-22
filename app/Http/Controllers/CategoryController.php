@@ -32,6 +32,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         //
+        $request->session()->flash('previousCategoryCreateUrl', $request->session()-> all()['_previous']['url']);
         return view('createCategory');
     }
 
@@ -56,7 +57,7 @@ class CategoryController extends Controller
         }
         
         $categoryService->newCategory($request->categoryName);
-        return redirect('/');
+        return redirect($request->session()->all()['previousCategoryCreateUrl']);
     }
 
     /**
@@ -76,9 +77,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CategoryServiceInterface $categoryService, $id)
+    public function edit(CategoryServiceInterface $categoryService,Request $request, $id)
     {
         //
+        $request->session()->flash('previousCategoryEditUrl', $request->session()-> all()['_previous']['url']);
         return view('editCategory')->with('category', $categoryService->getCategory($id));
     }
 
@@ -93,7 +95,7 @@ class CategoryController extends Controller
     {
         //Update choosen category
         $categoryService->updateCategory($id, $request->category);
-        return redirect('/');
+        return redirect($request->session()->all()['previousCategoryEditUrl']);
     }
 
     /**
@@ -108,4 +110,5 @@ class CategoryController extends Controller
         $categoryService->deleteCategory($id);
         return redirect()->back();
     }
+
 }

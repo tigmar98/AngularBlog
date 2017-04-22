@@ -98,7 +98,7 @@ class RegisterController extends Controller
                 'email' => $user->email,
                 'password' => bcrypt('null'),
             ]);
-            $socialService->createSocial($user->name, $user->email, $user->token, $user_service->getUserId($user->email), $user->avatar_original);
+            $socialService->createSocial($user->name, $user->email, $user->token, $userService->getUserId($user->email), $user->avatar_original);
         }
 
         // return redirect()->action('LoginController', [

@@ -4,9 +4,6 @@ namespace Blog\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Blog\Contracts\PostServiceInterface;
-use Blog\Contracts\CategoryServiceInterface;
-use Blog\Contracts\SocialServiceInterface;
-use Blog\Contracts\UserServiceInterface;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,9 +33,12 @@ class PostController extends Controller
     public function create(Request $request)
     {
         //
-        return view('createPost', [
-                'catId' => $request->catId
+        $request->session()->flash('previousPostCreateUrl', $request->session()->all()['_previous']['url']);
+        return view('createPost',
+            [
+                'catId' => $request->catId,
             ]);
+        //}
 
 
     }
@@ -53,6 +53,7 @@ class PostController extends Controller
     public function store(PostServiceInterface $postService, Request $request)
     {
         //Check the post
+
         $validator = Validator::make($request->all(), 
             [
                 'postTopic' => 'required|max:255',
@@ -60,15 +61,16 @@ class PostController extends Controller
             ]);
 
        if ($validator->fails()){
-                return redirect('/home')
-                       ->withInput()
-                       ->withErrors($validator);
+                return redirect()
+                        ->back()
+                        ->withInput()
+                        ->withErrors($validator);
 
             }
         //Add a new post
         $postService->newPost($request->all());
-        //return redirect()->back();
-        return redirect('/');
+        //dd($request->session()->all()['previousUrl']);
+        return redirect($request->session()->all()['previousPostCreateUrl']);
     }
 
     /**
@@ -90,9 +92,10 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function edit(PostServiceInterface $postService, $id)
+    public function edit(PostServiceInterface $postService,Request $request, $id)
     {
         //
+        $request->session()->flash('previousPostEditUrl', $request->session()->all()['_previous']['url']);
         return view('editPost')->with('post', $postService->getPost($id));
     }
 
@@ -122,7 +125,7 @@ class PostController extends Controller
 
             }
         $postService->updatePost($id, $request->all());
-        return redirect('/');
+        return redirect($request->session()->all()['previousPostEditUrl']);
     }
 
     /**

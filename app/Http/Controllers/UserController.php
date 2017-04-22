@@ -13,7 +13,8 @@ use Blog\Contracts\UserServiceInterface;
 class UserController extends Controller
 {
     //
-	public function showImageUploadForm(){
+	public function showImageUploadForm(Request $request){
+		$request->session()->flash('previousImageUploadUrl', $request->session()-> all()['_previous']['url']);
 		return view('imageUpload');
 	}
 
@@ -33,9 +34,10 @@ class UserController extends Controller
 
 	       $timestamp = time();
 	       $name =$timestamp.$file->getClientOriginalName();
-	       $userService->storeImage($name);
 	       $file->move(public_path().'/images/', $name);
+	       $userService->storeImage($name);
     	}
-    	return redirect('/');
+    	
+    	return redirect($request->session()->all()['previousImageUploadUrl']);
   	}
 }
