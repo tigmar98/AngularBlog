@@ -323,7 +323,7 @@ class ComposerStaticInit211c44e7d157f4f3cb6a9fc71647c3d2
         'Blog\\Contracts\\SocialServiceInterface' => __DIR__ . '/../..' . '/app/Contracts/SocialServiceInterface.php',
         'Blog\\Contracts\\UserServiceInterface' => __DIR__ . '/../..' . '/app/Contracts/UserServiceInterface.php',
         'Blog\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
-        'Blog\\Http\\Controllers\\AllPostsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AllPostsController.php',
+        'Blog\\Http\\Controllers\\Api\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/CategoryController.php',
         'Blog\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'Blog\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
         'Blog\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',

@@ -13,7 +13,7 @@ return array(
     'Blog\\Contracts\\SocialServiceInterface' => $baseDir . '/app/Contracts/SocialServiceInterface.php',
     'Blog\\Contracts\\UserServiceInterface' => $baseDir . '/app/Contracts/UserServiceInterface.php',
     'Blog\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
-    'Blog\\Http\\Controllers\\AllPostsController' => $baseDir . '/app/Http/Controllers/AllPostsController.php',
+    'Blog\\Http\\Controllers\\Api\\CategoryController' => $baseDir . '/app/Http/Controllers/Api/CategoryController.php',
     'Blog\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'Blog\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
     'Blog\\Http\\Controllers\\Auth\\RegisterController' => $baseDir . '/app/Http/Controllers/Auth/RegisterController.php',

@@ -3,7 +3,8 @@
 namespace Blog\Contracts;
 
 Interface CategoryServiceInterface
-{
+{	
+	public function allCategories();
 	public function allUserCategories();
 	public function getCategory($id);
 	public function newCategory($categoryName);

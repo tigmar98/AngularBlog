@@ -32,9 +32,9 @@ class UserService implements UserServiceInterface
 			if(!file_exists(public_path().$imagePath)){
             	$imagePath = "/images/default-user-image.png";
             	}
-            } elseif($this->user->where('id', Auth::user()['id'])->first()->social->exists()){
+            }/* elseif($this->user->where('id', Auth::user()['id'])->first()->social->exists()){
             	$imagePath = $this->user->where('id', Auth::user()['id'])->first()->social->pluck('imagePath')->first();
-            } else {
+            }*/ else {
             	$imagePath = "/images/default-user-image.png";
             }
         return $imagePath;

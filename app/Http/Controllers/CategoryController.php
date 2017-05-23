@@ -5,6 +5,8 @@ namespace Blog\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use Blog\Contracts\CategoryServiceInterface;
+use Illuminate\Support\Facades\Auth;
+
 
 class CategoryController extends Controller
 {
@@ -19,9 +21,17 @@ class CategoryController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function id(CategoryServiceInterface $categoryService)
     {
         //
+        return response()->json(['id' => Auth::user()['id']]);
+    }
+
+    public function allCats(CategoryServiceInterface $categoryService){
+        
+        $categories = $categoryService->allUserCategories();
+        return response()->json(compact('categories'),200);
+
     }
 
     /**

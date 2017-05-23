@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/app';
 
     /**
      * Create a new controller instance.
@@ -90,7 +90,7 @@ class RegisterController extends Controller
         //dd($user->avatar_original);
         if($socialService->emailExists($user->email)){
             Auth::loginUsingId($userService->getUserId($user->email));
-            return redirect('/home');
+            return redirect('/app');
         }
         else {
             User::create([
@@ -108,7 +108,7 @@ class RegisterController extends Controller
 
         // $user->token;
         Auth::loginUsingId($userService->getUserId($user->email));
-        return redirect('/home');
+        return redirect('/app');
     }
 
 }

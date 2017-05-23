@@ -7,6 +7,8 @@ use Blog\Contracts\PostServiceInterface;
 use Blog\Contracts\CategoryServiceInterface;
 use Blog\Contracts\SocialServiceInterface;
 use Blog\Contracts\UserServiceInterface;
+use Illuminate\Support\Facades\Auth;
+
 
 class HomeController extends Controller
 {
@@ -28,6 +30,8 @@ class HomeController extends Controller
     public function index(CategoryServiceInterface $categoryService,  UserServiceInterface $userService)
     {
         //
+        //dd(Auth::user()['id']);
+
         $categories = $categoryService->allUserCategories();
         $imagePath = $userService->getUserImage();
         return view('home',

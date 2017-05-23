@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('home');
+    return redirect('app');
 });
 
 Auth::routes();
@@ -27,6 +27,4 @@ Route::put('/imageupload', 'UserController@storeImage');
 Route::get('auth/facebook', 'Auth\RegisterController@redirectToProvider');
 Route::get('auth/facebook/callback', 'Auth\RegisterController@handleProviderCallback');
 Route::get('/showallposts', 'PostController@showAllPosts');
-
-
-
+Route::get('/api/category', 'CategoryController@allCats');

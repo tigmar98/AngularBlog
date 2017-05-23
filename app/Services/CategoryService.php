@@ -13,6 +13,10 @@ class CategoryService implements CategoryServiceInterface
 		$this->category = $category;
 	}
 
+	public function allCategories(){
+		return $this->category->get();
+	}
+	
 	public function allUserCategories(){
 		return $this->category->where('userId', Auth::user()['id'])->get();
 	}
