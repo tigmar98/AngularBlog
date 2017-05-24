@@ -1,0 +1,8 @@
+<div>
+	<form>
+		<input type="text" name="category" ng-model="catName" required>
+		<button type="submit" ng-click="addCategory()">Add New Category</button>
+	</form>
+
+	<div ng-show="showMessage">{{message}}</div>
+</div>

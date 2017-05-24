@@ -1,3 +1,5 @@
-app.controller('PostController', ['$scope', function($scope) { 
-  $scope.posts = 'Post'
+app.controller('PostController', ['$scope', '$http', function($scope, $http) { 
+
+	
+	
 }]);

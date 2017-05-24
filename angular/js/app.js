@@ -24,7 +24,11 @@ app.config(function($routeProvider){
 		})*/
 		.when("/addcategory", {
 			controller: "CategoryController",
-			templateUrl: "views/addcategory.html"
+			templateUrl: "views/addCategory.html"
+		})
+		.when("/addpost", {
+			controller: "PostController",
+			templateUrl: "views/addPost.html"
 		})
 		.otherwise({
 			template: "<h1>The Otherwise works now</h1>"

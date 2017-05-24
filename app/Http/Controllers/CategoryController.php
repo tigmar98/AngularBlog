@@ -21,11 +21,6 @@ class CategoryController extends Controller
         $this->middleware('auth');
     }
 
-    public function id(CategoryServiceInterface $categoryService)
-    {
-        //
-        return response()->json(['id' => Auth::user()['id']]);
-    }
 
     public function allCats(CategoryServiceInterface $categoryService){
         
@@ -55,7 +50,7 @@ class CategoryController extends Controller
     public function store(CategoryServiceInterface $categoryService, Request $request)
     {
         //Add new category
-        $validator = Validator::make($request->all(), 
+        /*$validator = Validator::make($request->all(), 
             [
                 'categoryName' => 'required|max:255',
             ]);
@@ -67,7 +62,9 @@ class CategoryController extends Controller
         }
         
         $categoryService->newCategory($request->categoryName);
-        return redirect($request->session()->all()['previousCategoryCreateUrl']);
+        return redirect($request->session()->all()['previousCategoryCreateUrl']);*/
+        $categoryService->newCategory($request['catName']);
+        return response()->json(['msg' => 'Sir, You have successfuly created new category. Congrats!!!!']);
     }
 
     /**
@@ -118,7 +115,7 @@ class CategoryController extends Controller
     {
         //Remove choosen category
         $categoryService->deleteCategory($id);
-        return redirect()->back();
+        return response()->json(['msg' => 'You, Sir, have just deleted a whole category with its posts!!!']);
     }
 
 }

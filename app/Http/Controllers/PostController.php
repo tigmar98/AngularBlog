@@ -139,7 +139,7 @@ class PostController extends Controller
     {
         //Remove the choosen post
         $postService->deletePost($id);
-        return redirect()->back();
+        return response()->json(['msg' => 'You have just deleted a Post, Sir!!!']);
     }
 
     public function showAllPosts(PostServiceInterface $postService){
@@ -160,4 +160,13 @@ class PostController extends Controller
             'posts' => $posts,
         ]);
     }
+
+
+    public function showPosts(PostServiceInterface $postService, Request $request, $id){
+        $posts = $postService->getPostsByCategoryId($id);
+       
+        return response()->json($posts);
+        //return response()->json(['success' => 'success']);
+    }
+
 }
