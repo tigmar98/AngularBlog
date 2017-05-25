@@ -70,7 +70,8 @@ class PostController extends Controller
         //Add a new post
         $postService->newPost($request->all());
         //dd($request->session()->all()['previousUrl']);
-        return redirect($request->session()->all()['previousPostCreateUrl']);
+        //return redirect($request->session()->all()['previousPostCreateUrl']);
+        return response()->json(['msg' => 'Sir, You have successfully created a new post. Congrats!!!']);
     }
 
     /**

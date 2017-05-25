@@ -1,12 +1,12 @@
 app.factory('Category', function($http){
-		return {
-			get: function(){
-					$http.get('/api/category').then(function(response){
-				 		 console.log(response.data);    	
-		    		})  
-				//var str = "text"
-				
-			}
-		}
-		//return "Success"
-	})
+		
+	/*function x(){
+		return 5;
+	}*/
+	var catId = null;
+	var category = "";
+	return {
+		catId: catId,
+		category: category
+	}
+})

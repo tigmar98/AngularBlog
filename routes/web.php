@@ -34,3 +34,5 @@ Route::get('/api/category/allpost/{id}', 'PostController@showPosts');
 Route::delete('/api/post/{id}', 'PostController@destroy');
 Route::delete('/api/category/{id}', 'CategoryController@destroy');
 Route::post('/api/category/', 'CategoryController@store');
+Route::post('/api/post/', 'PostController@store');
+Route::put('/api/updatecategory', 'CategoryController@update');

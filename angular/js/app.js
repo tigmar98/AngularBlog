@@ -30,6 +30,10 @@ app.config(function($routeProvider){
 			controller: "PostController",
 			templateUrl: "views/addPost.html"
 		})
+		.when("/editcategory", {
+			controller: "CategoryController",
+			templateUrl: "views/editCategory.html"
+		})
 		.otherwise({
 			template: "<h1>The Otherwise works now</h1>"
 		})

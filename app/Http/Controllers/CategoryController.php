@@ -64,7 +64,7 @@ class CategoryController extends Controller
         $categoryService->newCategory($request->categoryName);
         return redirect($request->session()->all()['previousCategoryCreateUrl']);*/
         $categoryService->newCategory($request['catName']);
-        return response()->json(['msg' => 'Sir, You have successfuly created new category. Congrats!!!!']);
+        return response()->json(['msg' => 'Sir, You have successfuly created new category. Congrats!!!!', 'success' => true]);
     }
 
     /**
@@ -98,11 +98,12 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryServiceInterface $categoryService, Request $request, $id)
+    public function update(CategoryServiceInterface $categoryService, Request $request)
     {
         //Update choosen category
-        $categoryService->updateCategory($id, $request->category);
-        return redirect($request->session()->all()['previousCategoryEditUrl']);
+        //$categoryService->updateCategory($request->id, $request->category);
+        //return response()->json(['msg' => 'Sir, You have just updated a category. Bravo!!']);
+        return response()->json($request);
     }
 
     /**
