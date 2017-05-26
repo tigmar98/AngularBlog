@@ -32,8 +32,8 @@ class PostService implements PostServiceInterface
 		]);	
 	}
 
-	public function updatePost($id, $data){
-		return $this->post->where('id', $id)->update([
+	public function updatePost($data){
+		return $this->post->where('id', $data['id'])->update([
 				'postTopic' => $data['postTopic'],
 				'post' => $data['post'],
 			]);

@@ -108,7 +108,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(PostServiceInterface $postService, Request $request, $id)
+    public function update(PostServiceInterface $postService, Request $request)
     {
         //Update the choosen post
 
@@ -125,8 +125,8 @@ class PostController extends Controller
                         ->withErrors($validator);
 
             }
-        $postService->updatePost($id, $request->all());
-        return redirect($request->session()->all()['previousPostEditUrl']);
+        $postService->updatePost($request->all());
+        return response()->json(['msg' => 'Sir, You have successfully updated your post!!!']);
     }
 
     /**

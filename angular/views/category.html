@@ -1,5 +1,8 @@
 <div ng-controller="CategoryController">
-<button type="button" ng-click="getCategories()">Show My Categories</button>
+	<div>
+		<a href = "#/addcategory">Add New Category</a>
+	</div>
+	<button type="button" ng-click="getCategories()">Show My Categories</button>
 	<ul class="list-group">
 		<li ng-repeat="cat in categories">
  			<button type="button" ng-click="getCatPost(cat.id)">{{cat.category}}</button>
@@ -11,12 +14,15 @@
 	<div ng-show="showLink">
 		<a ng-click="createPost(catId)" href="">Add New Post</a>
 	</div>
+	
 	<div>
 		<div ng-repeat="post in posts">
 			<span><strong>{{post.postTopic}}</strong></span>&nbsp<span>{{post.post}}</span>
 			<button type="button" ng-click="deletePost(post.id)">Delete Me</button>
+			<button type="button" ng-click="editPost(post.id, post.postTopic, post.post)">Edit Post</button>
 		</div>
 	</div>
+
 	<div ng-show="showMessage">
 		{{message}}
 	</div>

@@ -15,5 +15,22 @@
     "laravel-mix": "^0.8.3",
     "lodash": "^4.17.4",
     "vue": "^2.1.10"
-  }
+  },
+  "name": "blog",
+  "description": "<<<<<<< HEAD\r # Blog\r Laravel Blog\r =======\r # AngularBlog\r Angular &amp; Laravel Blog\r >>>>>>> 3e5c1a1675d735a288619cbc754e89b7b42b2091",
+  "version": "1.0.0",
+  "main": "index.php",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tigmar98/AngularBlog.git"
+  },
+  "author": "Tigran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tigmar98/AngularBlog/issues"
+  },
+  "homepage": "https://github.com/tigmar98/AngularBlog#readme"
 }

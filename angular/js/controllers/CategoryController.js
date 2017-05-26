@@ -1,10 +1,5 @@
-app.controller('CategoryController', ['$scope', '$http', '$rootScope', '$window', '$location', 'Category', function($scope, $http, $window, $rootScope, $location, Category) { 
+	app.controller('CategoryController', ['$scope', '$http', '$rootScope', '$window', '$location', 'Category', 'Post', function($scope, $http, $window, $rootScope, $location, Category, Post) { 
     
-    // $scope.categories = Category.get()
-				// 		    .success(function(data){
-				// 		    	return data
-				// 		    })
-
     $scope.posts = "";
     $scope.message = "";
     $scope.showMessage = false;
@@ -23,9 +18,7 @@ app.controller('CategoryController', ['$scope', '$http', '$rootScope', '$window'
     	$http.get('/api/category/allpost/' + id).then(function(response){
     		$scope.posts = response.data
     		$scope.showLink = true;
-
-    	})
-    	
+    	}) 	
     }
 
     $scope.deleteCategory = function(id){
@@ -55,7 +48,6 @@ app.controller('CategoryController', ['$scope', '$http', '$rootScope', '$window'
     			}
     		})
     	}
-
     }
 
     $scope.createPost = function(id){
@@ -65,16 +57,27 @@ app.controller('CategoryController', ['$scope', '$http', '$rootScope', '$window'
     }
 
     $scope.editCategory = function(id, category){
-    	$scope.catId = id;
+    	Category.catId = id;
+    	//console.log(Category.catId);
     	$location.path('/editcategory');
     	//$scope.category = category;
     }
 
     $scope.updateCategory = function(){
-    	$http.put('/api/updatecategory', {id: $scope.catId, category: $scope.category}).then(function(response){
-    		//$location.path('/')
-    		console.log(response.data)
+    	//console.log(Category.catId);
+    	$http.put('/api/updatecategory', {id: Category.catId, category: $scope.category}).then(function(response){
+    		$location.path('/')
+    		$scope.message = response.data.msg;
+    		$scope.showMessage = true;
+    		//console.log(response.data)
     	})
+    }
+
+    $scope.editPost = function(id, postTopic, post){
+    	Post.id = id;
+    	Post.postTopic = postTopic;
+    	Post.post = post;
+    	$location.path('/editpost');
     }
 
 }]);

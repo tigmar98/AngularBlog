@@ -1,4 +1,4 @@
-var app = angular.module("blogApp", ['ngRoute']);
+var app = angular.module("blogApp", ['ngRoute', 'ngFileUpload']);
 
 /*app.config(function ($routeProvider){
 	$routeProvider
@@ -33,6 +33,10 @@ app.config(function($routeProvider){
 		.when("/editcategory", {
 			controller: "CategoryController",
 			templateUrl: "views/editCategory.html"
+		})
+		.when("/editpost", {
+			controller: "PostController",
+			templateUrl: "views/editPost.html"
 		})
 		.otherwise({
 			template: "<h1>The Otherwise works now</h1>"

@@ -101,9 +101,9 @@ class CategoryController extends Controller
     public function update(CategoryServiceInterface $categoryService, Request $request)
     {
         //Update choosen category
-        //$categoryService->updateCategory($request->id, $request->category);
-        //return response()->json(['msg' => 'Sir, You have just updated a category. Bravo!!']);
-        return response()->json($request);
+        $categoryService->updateCategory($request->id, $request->category);
+        return response()->json(['msg' => 'Sir, You have just updated a category. Bravo!!']);
+        //return response()->json($request);
     }
 
     /**
