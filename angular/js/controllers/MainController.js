@@ -1,4 +1,4 @@
-app.controller('MainController', ['$scope', '$http', '$location', '$route', 'Upload', function($scope, $http, $location, $route, Upload) { 
+app.controller('MainController', ['$scope', '$http', '$window', '$location', 'Upload', function($scope, $http, $window, $location, Upload) { 
   
   $scope.userImage = "";
 
@@ -14,9 +14,10 @@ app.controller('MainController', ['$scope', '$http', '$location', '$route', 'Upl
 	  	})
 	  	file.upload.then(function (response){
 	  		$scope.message = response.data.msg;
-	  		$route.reload()
 	  	})
   	}
+	$window.location.reload()
+	$location.path('/')
   }
 
 

@@ -38,6 +38,10 @@ app.config(function($routeProvider){
 			controller: "PostController",
 			templateUrl: "views/editPost.html"
 		})
+		.when("/changeavatar", {
+			controller: "MainController",
+			templateUrl: "views/changeAvatar.html"
+		})
 		.otherwise({
 			template: "<h1>The Otherwise works now</h1>"
 		})
